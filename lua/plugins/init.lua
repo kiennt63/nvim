@@ -217,25 +217,40 @@ require('lazy').setup({
     {
         'saghen/blink.cmp',
         -- optional: provides snippets for the snippet source
-        dependencies = 'rafamadriz/friendly-snippets',
+        -- dependencies = 'rafamadriz/friendly-snippets',
+        dependencies = { 'L3MON4D3/LuaSnip', version = 'v2.*' },
 
         version = '*',
 
         opts = {
-            keymap = { preset = 'super-tab' },
+            keymap = { preset = 'enter' },
             appearance = {
                 use_nvim_cmp_as_default = true,
                 nerd_font_variant = 'normal',
             },
+            snippets = {
+                expand = function(snippet)
+                    require('luasnip').lsp_expand(snippet)
+                end,
+                active = function(filter)
+                    if filter and filter.direction then
+                        return require('luasnip').jumpable(filter.direction)
+                    end
+                    return require('luasnip').in_snippet()
+                end,
+                jump = function(direction)
+                    require('luasnip').jump(direction)
+                end,
+            },
 
             sources = {
-                default = { 'lsp', 'path', 'snippets', 'buffer' },
+                default = { 'luasnip', 'lsp', 'path', 'buffer' },
                 cmdline = {},
             },
 
             completion = {
                 list = { selection = 'auto_insert' },
-            }
+            },
         },
         opts_extend = { 'sources.default' },
     },
@@ -283,7 +298,7 @@ require('lazy').setup({
         'folke/which-key.nvim',
         opts = {
 
-            delay = function (ctx)
+            delay = function(ctx)
                 return ctx.plugin and 0 or 1000
             end,
         },
@@ -626,7 +641,7 @@ require 'plugins/config/dap'
 -- require 'plugins/config/cmp'
 require 'plugins/config/lualine'
 require 'plugins/config/nvim-tree'
--- require 'plugins/config/snippet'
+require 'plugins/config/snippet'
 require 'plugins/config/scheme'
 require 'plugins/config/bbq'
 require 'plugins/config/nonels'
