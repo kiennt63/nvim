@@ -3,7 +3,7 @@ local opts = { noremap = true, silent = true }
 -- Shorten function name
 local keymap = vim.keymap.set
 
-local harpoon = require('harpoon')
+local harpoon = require 'harpoon'
 
 --Remap space as leader key
 keymap('', '<Space>', '<Nop>', opts)
@@ -17,40 +17,11 @@ keymap('n', '<leader>lt', ':ClangdSwitchSourceHeader<cr>', opts)
 
 -- debugger
 local dap = require 'dap'
-vim.keymap.set('n', '<leader>dc', dap.continue, {})
-vim.keymap.set('n', '<leader>dn', dap.step_over, {})
-vim.keymap.set('n', '<leader>di', dap.step_into, {})
-vim.keymap.set('n', '<leader>do', dap.step_out, {})
-vim.keymap.set('n', '<leader>db', dap.toggle_breakpoint, {})
-
--- vim.keymap.set('n', '<leader>lp', function()
---     require('dap').set_breakpoint(nil, nil, vim.fn.input 'Log point message: ')
--- end)
--- vim.keymap.set('n', '<leader>dr', function()
---     require('dap').repl.open()
--- end)
--- vim.keymap.set('n', '<leader>dl', function()
---     require('dap').run_last()
--- end)
--- vim.keymap.set({ 'n', 'v' }, '<leader>dh', function()
---     require('dap.ui.widgets').hover()
--- end)
--- vim.keymap.set({ 'n', 'v' }, '<leader>dp', function()
---     require('dap.ui.widgets').preview()
--- end)
--- vim.keymap.set('n', '<leader>df', function()
---     local widgets = require 'dap.ui.widgets'
---     widgets.centered_float(widgets.frames)
--- end)
--- vim.keymap.set('n', '<leader>ds', function()
---     local widgets = require 'dap.ui.widgets'
---     widgets.centered_float(widgets.scopes)
--- end)
--- vim.keymap.set('n', '<leader>B', dap.set_breakpoint, {})
-
--- -- Open sidebar
--- vim.keymap.set('n', '<leader>e', ':NvimTreeOpen<cr>', { noremap = true, silent = true })
--- vim.keymap.set('n', '<leader>b', ':NvimTreeToggle<cr>', { noremap = true, silent = true })
+vim.keymap.set('n', '<leader>dc', dap.continue, opts)
+vim.keymap.set('n', '<leader>dn', dap.step_over, opts)
+vim.keymap.set('n', '<leader>di', dap.step_into, opts)
+vim.keymap.set('n', '<leader>do', dap.step_out, opts)
+vim.keymap.set('n', '<leader>db', dap.toggle_breakpoint, opts)
 
 -- Better window navigation
 -- keymap("n", "<C-h>", "<C-w>h", opts)
@@ -71,38 +42,50 @@ keymap('n', '<esc><esc>', ':noh<cr>', opts)
 -- Navigate buffers
 keymap('n', '<S-h>', ':bprevious<CR>', opts)
 keymap('n', '<S-l>', ':bnext<CR>', opts)
-keymap('n', '<leader>bd', ':Bdelete<CR>', opts)
--- Navigate harpoon
--- keymap('n', '<A-1>', '<cmd>lua require("harpoon.ui").nav_file(1)<cr>', opts)
--- keymap('n', '<A-2>', '<cmd>lua require("harpoon.ui").nav_file(2)<cr>', opts)
--- keymap('n', '<A-3>', '<cmd>lua require("harpoon.ui").nav_file(3)<cr>', opts)
--- keymap('n', '<A-4>', '<cmd>lua require("harpoon.ui").nav_file(4)<cr>', opts)
--- keymap('n', '<A-5>', '<cmd>lua require("harpoon.ui").nav_file(5)<cr>', opts)
--- keymap('n', '<A-6>', '<cmd>lua require("harpoon.ui").nav_file(6)<cr>', opts)
--- keymap('n', '<A-7>', '<cmd>lua require("harpoon.ui").nav_file(7)<cr>', opts)
--- keymap('n', '<A-8>', '<cmd>lua require("harpoon.ui").nav_file(8)<cr>', opts)
--- keymap('n', '<A-9>', '<cmd>lua require("harpoon.ui").nav_file(9)<cr>', opts)
---
--- keymap('n', '<leader>bp', '<cmd>lua require("harpoon.mark").add_file()<cr>', opts)
--- keymap('n', '<leader>fh', '<cmd>lua require("harpoon.ui").toggle_quick_menu()<cr>', opts)
+-- keymap('n', '<leader>bd', ':Bdelete<CR>', opts)
 
 -- -- Navigate harpoon
-keymap('n', '<A-1>', function () harpoon:list():select(1) end, opts)
-keymap('n', '<A-2>', function () harpoon:list():select(2) end, opts)
-keymap('n', '<A-3>', function () harpoon:list():select(3) end, opts)
-keymap('n', '<A-4>', function () harpoon:list():select(4) end, opts)
-keymap('n', '<A-5>', function () harpoon:list():select(5) end, opts)
-keymap('n', '<A-6>', function () harpoon:list():select(6) end, opts)
-keymap('n', '<A-7>', function () harpoon:list():select(7) end, opts)
-keymap('n', '<A-8>', function () harpoon:list():select(8) end, opts)
-keymap('n', '<A-9>', function () harpoon:list():select(9) end, opts)
+keymap('n', '<A-1>', function()
+    harpoon:list():select(1)
+end, opts)
+keymap('n', '<A-2>', function()
+    harpoon:list():select(2)
+end, opts)
+keymap('n', '<A-3>', function()
+    harpoon:list():select(3)
+end, opts)
+keymap('n', '<A-4>', function()
+    harpoon:list():select(4)
+end, opts)
+keymap('n', '<A-5>', function()
+    harpoon:list():select(5)
+end, opts)
+keymap('n', '<A-6>', function()
+    harpoon:list():select(6)
+end, opts)
+keymap('n', '<A-7>', function()
+    harpoon:list():select(7)
+end, opts)
+keymap('n', '<A-8>', function()
+    harpoon:list():select(8)
+end, opts)
+keymap('n', '<A-9>', function()
+    harpoon:list():select(9)
+end, opts)
 
-keymap('n', '<leader>bp', function () harpoon:list():add() end, opts)
-keymap('n', '<leader>fh', function () harpoon.ui:toggle_quick_menu(harpoon:list()) end, opts)
+keymap('n', '<leader>bp', function()
+    harpoon:list():add()
+end, opts)
+keymap('n', '<leader>fh', function()
+    harpoon.ui:toggle_quick_menu(harpoon:list())
+end, opts)
 
-keymap('n', '<C-S-P>', function () harpoon:list():prev() end, opts)
-keymap('n', '<C-S-N>', function () harpoon:list():next() end, opts)
-
+keymap('n', '<C-S-P>', function()
+    harpoon:list():prev()
+end, opts)
+keymap('n', '<C-S-N>', function()
+    harpoon:list():next()
+end, opts)
 
 -- =======================================================
 -- Saving and stuff
@@ -160,19 +143,36 @@ keymap('n', '<leader>gp', ':r! cat /tmp/vitmp<CR>', opts)
 keymap('n', '<leader>t', ':TroubleToggle<cr>', opts)
 
 -- Diagnostic
-keymap('n', '<leader>ld', '<cmd>lua vim.diagnostic.open_float(nil, {focus=false})<cr>', { desc = '[L]SP [D]iagnostic' })
+keymap(
+    'n',
+    '<leader>ld',
+    '<cmd>lua vim.diagnostic.open_float(nil, {focus=false})<cr>',
+    { desc = '[L]SP [D]iagnostic' }
+)
 
-keymap('n', '[d', function ()
-    vim.diagnostic.goto_prev({ severity = vim.diagnostic.severity.WARN, wrap = true })
+keymap('n', '[d', function()
+    vim.diagnostic.goto_prev {
+        severity = vim.diagnostic.severity.WARN,
+        wrap = true,
+    }
 end, opts)
-keymap('n', ']d', function ()
-    vim.diagnostic.goto_next({ severity = vim.diagnostic.severity.WARN, wrap = true })
+keymap('n', ']d', function()
+    vim.diagnostic.goto_next {
+        severity = vim.diagnostic.severity.WARN,
+        wrap = true,
+    }
 end, opts)
-keymap('n', '[D', function ()
-    vim.diagnostic.goto_prev({ severity = vim.diagnostic.severity.ERROR, wrap = true })
+keymap('n', '[D', function()
+    vim.diagnostic.goto_prev {
+        severity = vim.diagnostic.severity.ERROR,
+        wrap = true,
+    }
 end, opts)
-keymap('n', ']D', function ()
-    vim.diagnostic.goto_next({ severity = vim.diagnostic.severity.ERROR, wrap = true })
+keymap('n', ']D', function()
+    vim.diagnostic.goto_next {
+        severity = vim.diagnostic.severity.ERROR,
+        wrap = true,
+    }
 end, opts)
 
 -- keymap('n', '[d', require('delimited').goto_prev, opts)
@@ -212,44 +212,48 @@ end, opts)
 -- keymap("t", "<C-l>", "<C-\\><C-N><C-w>l", term_opts)
 
 -- Telescope
--- keymap("n", "<leader>F", "<cmd>Telescope find_files<cr>", opts)
-local live_grep_args_shortcuts = require 'telescope-live-grep-args.shortcuts'
--- keymap('n', '<leader>ff',
---     "<cmd>lua require('fzf-lua').files()<cr>",
---     opts)
--- keymap('n', '<leader>o',
---     "<cmd>lua require('fzf-lua').files()<cr>",
---     opts)
--- keymap('n', '<leader>ff', "<cmd>lua require'telescope.builtin'.find_files(require('telescope.themes').get_dropdown({ previewer = false }))<cr>", opts)
-keymap('n', '<leader>o',
-    "<cmd>lua require'telescope.builtin'.find_files(require('telescope.themes').get_dropdown({ previewer = false }))<cr>",
-    opts)
--- keymap('n', '<leader>fg', ":lua require('telescope').extensions.live_grep_args.live_grep_args()<CR>", opts)
-keymap('n', '<leader>fg',
-    ":lua require('telescope').extensions.live_grep_args.live_grep_args({ layout_stategy = 'vertical' })<CR>",
-    opts)
--- keymap('n', '<leader>fg',
---     ":lua require('fzf-lua').live_grep()<CR>",
---     opts)
-keymap('n', '<leader>fs', ':Telescope git_status<cr>', opts)
--- keymap('n', '<leader>fw', '<cmd>lua require("fzf-lua").live_grep({ search = vim.fn.expand("<cword>") })<cr>', opts)
--- keymap('n', '<leader>fw', live_grep_args_shortcuts.grep_word_under_cursor, { quote = false, postfix = '' })
-keymap('n', '<leader>fw', function ()
-    live_grep_args_shortcuts.grep_word_under_cursor({
-        quote = false,
-        postfix = ''
-    })
-end, opts)
-keymap('v', '<leader>fw', live_grep_args_shortcuts.grep_visual_selection, opts)
+-- keymap('n', '<leader>F', '<cmd>Telescope find_files<cr>', opts)
+-- local live_grep_args_shortcuts = require 'telescope-live-grep-args.shortcuts'
+-- keymap(
+--     'n',
+--     '<leader>o',
+--     "<cmd>lua require'telescope.builtin'.find_files(require('telescope.themes').get_dropdown({ previewer = false }))<cr>",
+--     opts
+-- )
+-- keymap(
+--     'n',
+--     '<leader>fg',
+--     ":lua require('telescope').extensions.live_grep_args.live_grep_args()<CR>",
+--     opts
+-- )
+-- keymap(
+--     'n',
+--     '<leader>fg',
+--     ":lua require('telescope').extensions.live_grep_args.live_grep_args({ layout_stategy = 'vertical' })<CR>",
+--     opts
+-- )
+-- keymap('n', '<leader>fs', ':Telescope git_status<cr>', opts)
+-- keymap('n', '<leader>fw', function()
+--     live_grep_args_shortcuts.grep_word_under_cursor {
+--         quote = false,
+--         postfix = '',
+--     }
+-- end, opts)
+-- keymap('v', '<leader>fw', live_grep_args_shortcuts.grep_visual_selection, opts)
+-- keymap('n', '<leader>fr', require('telescope.builtin').resume, { desc = '[F]ind [R]resume' })
 
-keymap('n', '<leader>fr', require('telescope.builtin').resume, { desc = '[F]ind [R]resume' })
+-- FzfLua
+keymap('n', '<leader>o', "<cmd>lua require('fzf-lua').files()<cr>", opts)
+keymap('n', '<leader>fg', "<cmd>lua require('fzf-lua').live_grep()<CR>", opts)
+keymap(
+    'n',
+    '<leader>fw',
+    '<cmd>lua require("fzf-lua").live_grep({ search = vim.fn.expand("<cword>") })<cr>',
+    opts
+)
+keymap('n', '<leader>fr', '<cmd>lua require("fzf-lua").resume()<cr>', opts)
 
 -- Git workstree
-keymap('n', '<leader>wt', "<cmd>lua require('telescope').extensions.git_worktree.git_worktrees()<cr>",
-    { desc = '[W]ork[T]ree' })
-keymap('n', '<leader>wc', "<cmd>lua require('telescope').extensions.git_worktree.create_git_worktree()<cr>",
-    { desc = '[W]orktree [C]reate' })
-
 -- File manager
 keymap('n', '<leader>fq', ':RnvimrToggle<cr>', opts)
 

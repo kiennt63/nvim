@@ -39,18 +39,6 @@ require('lazy').setup({
         },
     },
 
-    -- {
-    --     'jay-babu/mason-null-ls.nvim',
-    --     event = { 'BufReadPre', 'BufNewFile' },
-    --     dependencies = {
-    --         'williamboman/mason.nvim',
-    --         'nvimtools/none-ls.nvim',
-    --     },
-    --     config = function ()
-    --         require('your.null-ls.config') -- require your null-ls config here (example below)
-    --     end,
-    -- },
-
     {
         'nvimtools/none-ls.nvim',
     },
@@ -190,19 +178,6 @@ require('lazy').setup({
     },
 
     -- {
-    --     'ray-x/lsp_signature.nvim',
-    --     -- event = 'VeryLazy',
-    --     -- opts = {
-    --     --     log_path = vim.fn.expand('$HOME') .. '/tmp/sig.log',
-    --     --     debug = true,
-    --     --     hint_enable = false,
-    --     --     handler_opts = { border = 'rounded' },
-    --     --     max_width = 30,
-    --     -- },
-    --     -- config = function (_, opts) require 'lsp_signature'.setup(opts) end
-    -- },
-
-    -- {
     --     -- Autocompletion
     --     'hrsh7th/nvim-cmp',
     --     dependencies = {
@@ -216,49 +191,10 @@ require('lazy').setup({
     -- },
     {
         'saghen/blink.cmp',
-        -- optional: provides snippets for the snippet source
-        -- dependencies = 'rafamadriz/friendly-snippets',
         dependencies = { 'L3MON4D3/LuaSnip', version = 'v2.*' },
-
         version = '*',
-
-        opts = {
-            keymap = { preset = 'enter' },
-            appearance = {
-                use_nvim_cmp_as_default = true,
-                nerd_font_variant = 'normal',
-            },
-            snippets = {
-                expand = function(snippet)
-                    require('luasnip').lsp_expand(snippet)
-                end,
-                active = function(filter)
-                    if filter and filter.direction then
-                        return require('luasnip').jumpable(filter.direction)
-                    end
-                    return require('luasnip').in_snippet()
-                end,
-                jump = function(direction)
-                    require('luasnip').jump(direction)
-                end,
-            },
-
-            sources = {
-                default = { 'luasnip', 'lsp', 'path', 'buffer' },
-                cmdline = {},
-            },
-
-            completion = {
-                list = { selection = 'auto_insert' },
-            },
-        },
         opts_extend = { 'sources.default' },
     },
-
-    -- {
-    --     'iamcco/markdown-preview.nvim',
-    --     config = function () vim.fn['mkdp#util#install']() end,
-    -- },
 
     {
         'kylechui/nvim-surround',
@@ -340,34 +276,6 @@ require('lazy').setup({
         },
     },
 
-    -- session manager
-    -- {
-    --     'rmagatti/auto-session',
-    --     opts = {
-    --         log_level = 'error',
-    --         cwd_change_handling = {
-    --             post_cwd_changed_hook = function () -- example refreshing the lualine status line _after_ the cwd changes
-    --                 require('lualine').refresh()    -- refresh lualine so the new session name is displayed in the status bar
-    --             end,
-    --             post_restore_cmds = {
-    --                 -- function ()
-    --                 --     local nvim_tree = require('nvim-tree')
-    --                 --     nvim_tree.change_dir(vim.fn.getcwd())
-    --                 -- end,
-    --                 -- 'NvimTreeOpen'
-    --             }
-    --         },
-    --     }
-    -- },
-    -- {
-    --     "folke/persistence.nvim",
-    --     event = "BufReadPre",                          -- this will only start session saving when an actual file was opened
-    --     opts = {
-    --         dir = vim.fn.stdpath('data') .. '/session/' -- add any custom options here
-    -- {
-    --     'ThePrimeagen/git-worktree.nvim',
-    -- },
-
     {
         -- Adds git related signs to the gutter, as well as utilities for managing changes
         'lewis6991/gitsigns.nvim',
@@ -382,7 +290,12 @@ require('lazy').setup({
                 untracked = { text = '╏' },
             },
             on_attach = function(bufnr)
-                vim.keymap.set('n', '<leader>hp', require('gitsigns').preview_hunk, { buffer = bufnr, desc = 'Preview git hunk' })
+                vim.keymap.set(
+                    'n',
+                    '<leader>hp',
+                    require('gitsigns').preview_hunk,
+                    { buffer = bufnr, desc = 'Preview git hunk' }
+                )
 
                 -- don't override the built-in and fugitive keymaps
                 local gs = package.loaded.gitsigns
@@ -408,24 +321,16 @@ require('lazy').setup({
         },
     },
 
-    -- Theme inspired by Atom
     {
         'catppuccin/nvim',
         name = 'catppuccin',
         opts = {
-            no_italic = true,
+            no_italic = false,
             background = { -- :h background
                 light = 'latte',
                 dark = 'mocha',
             },
             transparent_background = true, -- disables setting the background color.
-            -- show_end_of_buffer = false,     -- shows the '~' characters after the end of buffers
-            -- dim_inactive = {
-            -- term_colors = false,            -- sets terminal colors (e.g. `g:terminal_color_0`)
-            --     enabled = false,            -- dims the background color of inactive window
-            --     shade = 'dark',
-            --     percentage = 0.15,          -- percentage of the shade to apply to the inactive window
-            -- },
             no_bold = false, -- Force no bold
             no_underline = true, -- Force no underline
         },
@@ -434,9 +339,6 @@ require('lazy').setup({
     {
         -- Theme inspired by Atom
         'kiennt63/nightfox.nvim',
-        --     config = function ()
-        --         vim.cmd.colorscheme 'nord'
-        --     end,
         opts = {
             options = {
                 transparent = true,
@@ -444,31 +346,12 @@ require('lazy').setup({
         },
     },
 
-    -- {
-    --     'gbprod/nord.nvim',
-    -- },
-
     {
-        -- Theme inspired by Atom
         'sainnhe/everforest',
-        --     config = function ()
-        --         vim.cmd.colorscheme 'nord'
-        --     end,
     },
-
-    -- {
-    --     -- Theme inspired by Atom
-    --     'shaunsingh/nord.nvim',
-    --     --     config = function ()
-    --     --         vim.cmd.colorscheme 'nord'
-    --     --     end,
-    -- },
 
     {
         'kiennt63/gruvbox-material',
-        -- config = function ()
-        --     vim.cmd.colorscheme 'gruvbox-material'
-        -- end,
     },
 
     {
@@ -476,46 +359,11 @@ require('lazy').setup({
         'nvim-lualine/lualine.nvim',
     },
 
-    -- Indentation
-    -- {
-    --     'lukas-reineke/indent-blankline.nvim',
-    --     main = 'ibl',
-    --     opts = {
-    --         indent = {
-    --             char = '│',
-    --         },
-    --         scope = {
-    --             enabled = false,
-    --             show_start = false,
-    --             show_end = false,
-    --         },
-    --         -- show_trailing_blankline_indent = false,
-    --     },
-    -- },
-
-    -- show color
-    -- {
-    --     'norcalli/nvim-colorizer.lua',
-    --     config = function ()
-    --         require('colorizer').setup()
-    --     end,
-    -- },
-
-    -- Automatically add pair for brackets
     {
         'windwp/nvim-autopairs',
         event = 'InsertEnter',
         opts = {},
     },
-
-    -- Breadcrumb
-    -- {
-    --     'Bekaboo/dropbar.nvim',
-    --     -- optional, but required for fuzzy finder support
-    --     dependencies = {
-    --         'nvim-telescope/telescope-fzf-native.nvim'
-    --     }
-    -- },
 
     -- Diagnostics
     {
@@ -526,25 +374,16 @@ require('lazy').setup({
         },
     },
 
-    -- {
-    --     'mizlan/delimited.nvim',
-    -- },
-
     {
         'folke/todo-comments.nvim',
         dependencies = { 'nvim-lua/plenary.nvim' },
-        opts = {
-            -- your configuration comes here
-            -- or leave it empty to use the default settings
-            -- refer to the configuration section below
-        },
     },
 
-    {
-        'ThePrimeagen/harpoon',
-        commit = 'e76cb03',
-        dependencies = { 'nvim-lua/plenary.nvim' },
-    },
+    -- {
+    --     'ThePrimeagen/harpoon',
+    --     commit = 'e76cb03',
+    --     dependencies = { 'nvim-lua/plenary.nvim' },
+    -- },
 
     -- "gc" to comment visual regions/lines
     { 'numToStr/Comment.nvim', opts = {} },
@@ -584,15 +423,15 @@ require('lazy').setup({
         },
     },
 
-    -- {
-    --     'ibhagwan/fzf-lua',
-    --     -- optional for icon support
-    --     dependencies = { 'nvim-tree/nvim-web-devicons' },
-    --     config = function ()
-    --         -- calling `setup` is optional for customization
-    --         require('fzf-lua').setup {}
-    --     end,
-    -- },
+    {
+        'ibhagwan/fzf-lua',
+        -- optional for icon support
+        dependencies = { 'nvim-tree/nvim-web-devicons' },
+        config = function()
+            -- calling `setup` is optional for customization
+            require('fzf-lua').setup {}
+        end,
+    },
 
     {
         'kiennt63/harpoon-files.nvim',
@@ -600,6 +439,7 @@ require('lazy').setup({
             { 'ThePrimeagen/harpoon', branch = 'harpoon2' },
         },
         opts = {
+            icon = '',
             max_length = 20,
         },
     },
@@ -639,6 +479,7 @@ require 'plugins/config/treesitter'
 require 'plugins/config/lsp'
 require 'plugins/config/dap'
 -- require 'plugins/config/cmp'
+require 'plugins/config/blink'
 require 'plugins/config/lualine'
 require 'plugins/config/nvim-tree'
 require 'plugins/config/snippet'
