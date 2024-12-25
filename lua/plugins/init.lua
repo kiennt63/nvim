@@ -29,6 +29,7 @@ require('lazy').setup({
         },
     },
 
+    -- symbols tree
     {
         'stevearc/aerial.nvim',
         opts = {},
@@ -39,10 +40,12 @@ require('lazy').setup({
         },
     },
 
+    -- linter, formater
     {
         'nvimtools/none-ls.nvim',
     },
 
+    -- better clangd
     {
         'p00f/clangd_extensions.nvim',
         lazy = true,
@@ -115,15 +118,6 @@ require('lazy').setup({
         },
     },
 
-    -- { 'ggandor/leap.nvim' },
-
-    -- {
-    --     'goolord/alpha-nvim',
-    --     config = function()
-    --         require('alpha').setup(require('alpha.themes.dashboard').config)
-    --     end,
-    -- },
-
     {
         'echasnovski/mini.starter',
         version = '*',
@@ -153,7 +147,8 @@ require('lazy').setup({
                     },
                     {
                         name = 'pinned',
-                        action = 'lua require("harpoon.ui").toggle_quick_menu()',
+                        action = 'lua require("harpoon.ui"):toggle_quick_menu(require("harpoon"):list())',
+                        -- harpoon.ui:toggle_quick_menu(harpoon:list())
                         section = '',
                     },
                     {
@@ -177,18 +172,7 @@ require('lazy').setup({
         end,
     },
 
-    -- {
-    --     -- Autocompletion
-    --     'hrsh7th/nvim-cmp',
-    --     dependencies = {
-    --         'L3MON4D3/LuaSnip',
-    --         'saadparwaiz1/cmp_luasnip',
-    --         'hrsh7th/cmp-nvim-lsp',
-    --         'hrsh7th/cmp-path',
-    --         'hrsh7th/cmp-buffer',
-    --         'rafamadriz/friendly-snippets',
-    --     },
-    -- },
+    -- auto completion
     {
         'saghen/blink.cmp',
         dependencies = { 'L3MON4D3/LuaSnip', version = 'v2.*' },
@@ -196,6 +180,7 @@ require('lazy').setup({
         opts_extend = { 'sources.default' },
     },
 
+    -- change surround char
     {
         'kylechui/nvim-surround',
         version = '*', -- Use for stability; omit to use `main` branch for the latest features
@@ -222,21 +207,56 @@ require('lazy').setup({
         end,
     },
 
+    -- quality of life
     {
-        'shortcuts/no-neck-pain.nvim',
+        'folke/snacks.nvim',
+        priority = 1000,
+        lazy = false,
+        ---@type snacks.Config
         opts = {
-            width = 100,
-        },
-    },
-
-    -- -- whichkey
-    {
-        'folke/which-key.nvim',
-        opts = {
-
-            delay = function(ctx)
-                return ctx.plugin and 0 or 1000
-            end,
+            -- your configuration comes here
+            -- or leave it empty to use the default settings
+            -- refer to the configuration section below
+            bigfile = { enabled = true },
+            dashboard = { enabled = false },
+            indent = { enabled = false },
+            input = { enabled = true },
+            notifier = { enabled = false },
+            quickfile = { enabled = true },
+            scroll = { enabled = false },
+            statuscolumn = { enabled = true },
+            words = { enabled = false },
+            zen = {
+                toggles = {
+                    dim = false,
+                    git_signs = true,
+                    mini_diff_signs = false,
+                    -- diagnostics = false,
+                    -- inlay_hints = false,
+                },
+                show = {
+                    statusline = true, -- can only be shown when using the global statusline
+                    tabline = true,
+                },
+                ---@type snacks.win.Config
+                win = { style = 'zen' },
+                --- Callback when the window is opened.
+                ---@param win snacks.win
+                on_open = function(win) end,
+                --- Callback when the window is closed.
+                ---@param win snacks.win
+                on_close = function(win) end,
+                --- Options for the `Snacks.zen.zoom()`
+                ---@type snacks.zen.Config
+                zoom = {
+                    toggles = {},
+                    show = { statusline = true, tabline = true },
+                    win = {
+                        backdrop = false,
+                        width = 0, -- full width
+                    },
+                },
+            },
         },
     },
 

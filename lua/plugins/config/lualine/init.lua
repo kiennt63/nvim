@@ -60,6 +60,7 @@ require('lualine').setup {
         disabled_filetypes = {
             'alpha',
             'starter',
+            'ministarter',
             statusline = {},
             winbar = {},
         },

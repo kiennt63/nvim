@@ -261,7 +261,7 @@ keymap('n', '<leader>fq', ':RnvimrToggle<cr>', opts)
 keymap('v', '//', [[y/\V<c-r>=escape(@",'/\')<cr><cr>]], opts)
 
 -- Focus mode (centering window)
-keymap('n', '<leader>z', ':NoNeckPain<cr>', opts)
+keymap('n', '<leader>z', '<cmd>lua Snacks.zen()<cr>', opts)
 
 -- Git sign
 keymap('n', '<leader>gs', ':Gitsigns preview_hunk<cr>', opts)
