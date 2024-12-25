@@ -23,12 +23,6 @@ vim.keymap.set('n', '<leader>di', dap.step_into, opts)
 vim.keymap.set('n', '<leader>do', dap.step_out, opts)
 vim.keymap.set('n', '<leader>db', dap.toggle_breakpoint, opts)
 
--- Better window navigation
--- keymap("n", "<C-h>", "<C-w>h", opts)
-keymap('n', '<C-j>', '<C-w>w', opts)
--- keymap("n", "<C-k>", "<C-w>k", opts)
--- keymap("n", "<C-l>", "<C-w>l", opts)
-
 -- Resize with arrows
 -- keymap("n", "<C-Up>", ":resize -2<CR>", opts)
 -- keymap("n", "<C-Down>", ":resize +2<CR>", opts)
@@ -42,7 +36,7 @@ keymap('n', '<esc><esc>', ':noh<cr>', opts)
 -- Navigate buffers
 keymap('n', '<S-h>', ':bprevious<CR>', opts)
 keymap('n', '<S-l>', ':bnext<CR>', opts)
--- keymap('n', '<leader>bd', ':Bdelete<CR>', opts)
+keymap('n', '<leader>bd', '<cmd>lua Snacks.bufdelete()<CR>', opts)
 
 -- -- Navigate harpoon
 keymap('n', '<A-1>', function()
@@ -261,7 +255,7 @@ keymap('n', '<leader>fq', ':RnvimrToggle<cr>', opts)
 keymap('v', '//', [[y/\V<c-r>=escape(@",'/\')<cr><cr>]], opts)
 
 -- Focus mode (centering window)
-keymap('n', '<leader>z', '<cmd>lua Snacks.zen()<cr>', opts)
+keymap('n', '<leader>z', '<cmd>NoNeckPain<cr>', opts)
 
 -- Git sign
 keymap('n', '<leader>gs', ':Gitsigns preview_hunk<cr>', opts)

@@ -20,7 +20,7 @@ local on_attach = function(_, bufnr)
     nmap('<leader>rn', vim.lsp.buf.rename, '[R]e[n]ame')
     nmap('<leader>la', vim.lsp.buf.code_action, '[C]ode [A]ction')
 
-    nmap('gd', vim.lsp.buf.definition, '[G]oto [D]efinition')
+    nmap('gd', require('fzf-lua').lsp_definitions, '[G]oto [D]efinition')
     nmap('gr', require('fzf-lua').lsp_references, '[G]oto [R]eferences')
     nmap('gI', require('fzf-lua').lsp_implementations, '[G]oto [I]mplementation')
     nmap('<leader>D', require('fzf-lua').lsp_typedefs, 'Type [D]efinition')
@@ -29,7 +29,6 @@ local on_attach = function(_, bufnr)
 
     -- See `:help K` for why this keymap
     nmap('K', vim.lsp.buf.hover, 'Hover Documentation')
-    nmap('<C-k>', vim.lsp.buf.signature_help, 'Signature Documentation')
     imap('<C-k>', vim.lsp.buf.signature_help, 'Signature Documentation')
 
     -- Format code

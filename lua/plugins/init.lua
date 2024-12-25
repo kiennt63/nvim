@@ -32,8 +32,12 @@ require('lazy').setup({
     -- symbols tree
     {
         'stevearc/aerial.nvim',
-        opts = {},
-        -- Optional dependencies
+        opts = {
+            layout = {
+                resize_to_content = false,
+                preserve_equality = true,
+            },
+        },
         dependencies = {
             'nvim-treesitter/nvim-treesitter',
             'nvim-tree/nvim-web-devicons',
@@ -132,17 +136,17 @@ require('lazy').setup({
                 items = {
                     {
                         name = 'git',
-                        action = ':Telescope git_files',
+                        action = ':FzfLua git_files',
                         section = '',
                     },
                     {
                         name = 'todo',
-                        action = ':TodoTelescope',
+                        action = ':TodoFzfLua',
                         section = '',
                     },
                     {
                         name = 'files',
-                        action = "lua require'telescope.builtin'.find_files(require('telescope.themes').get_dropdown({ previewer = false }))",
+                        action = 'FzfLua files',
                         section = '',
                     },
                     {
@@ -209,6 +213,19 @@ require('lazy').setup({
 
     -- quality of life
     {
+        'shortcuts/no-neck-pain.nvim',
+        version = '*',
+        opts = {
+            integrations = {
+                NvimTree = {
+                    position = 'left',
+                    reopen = true,
+                },
+            },
+        },
+    },
+
+    {
         'folke/snacks.nvim',
         priority = 1000,
         lazy = false,
@@ -220,43 +237,55 @@ require('lazy').setup({
             bigfile = { enabled = true },
             dashboard = { enabled = false },
             indent = { enabled = false },
-            input = { enabled = true },
-            notifier = { enabled = false },
-            quickfile = { enabled = true },
-            scroll = { enabled = false },
-            statuscolumn = { enabled = true },
-            words = { enabled = false },
-            zen = {
-                toggles = {
-                    dim = false,
-                    git_signs = true,
-                    mini_diff_signs = false,
-                    -- diagnostics = false,
-                    -- inlay_hints = false,
-                },
-                show = {
-                    statusline = true, -- can only be shown when using the global statusline
-                    tabline = true,
-                },
-                ---@type snacks.win.Config
-                win = { style = 'zen' },
-                --- Callback when the window is opened.
-                ---@param win snacks.win
-                on_open = function(win) end,
-                --- Callback when the window is closed.
-                ---@param win snacks.win
-                on_close = function(win) end,
-                --- Options for the `Snacks.zen.zoom()`
-                ---@type snacks.zen.Config
-                zoom = {
-                    toggles = {},
-                    show = { statusline = true, tabline = true },
-                    win = {
-                        backdrop = false,
-                        width = 0, -- full width
+            input = {
+                enabled = true,
+                win = {
+                    keys = {
+                        i_del_word = { '<C-w>', 'delete_word', mode = 'i' },
+                    },
+                    actions = {
+                        delete_word = function()
+                            return '<cmd>normal! diw<cr><right>'
+                        end,
                     },
                 },
             },
+            notifier = { enabled = false },
+            quickfile = { enabled = true },
+            scroll = { enabled = false },
+            statuscolumn = { enabled = false },
+            words = { enabled = false },
+            -- zen = {
+            --    toggles = {
+            --         dim = false,
+            --         git_signs = true,
+            --         mini_diff_signs = false,
+            --         -- diagnostics = false,
+            --         -- inlay_hints = false,
+            --     },
+            --     show = {
+            --         statusline = true, -- can only be shown when using the global statusline
+            --         tabline = true,
+            --     },
+            --     ---@type snacks.win.Config
+            --     win = { style = 'zen' },
+            --     --- Callback when the window is opened.
+            --     ---@param win snacks.win
+            --     on_open = function(win) end,
+            --     --- Callback when the window is closed.
+            --     ---@param win snacks.win
+            --     on_close = function(win) end,
+            --     --- Options for the `Snacks.zen.zoom()`
+            --     ---@type snacks.zen.Config
+            --     zoom = {
+            --         toggles = {},
+            --         show = { statusline = true, tabline = true },
+            --         win = {
+            --             backdrop = false,
+            --             width = 0, -- full width
+            --         },
+            --     },
+            -- },
         },
     },
 
@@ -399,11 +428,11 @@ require('lazy').setup({
         dependencies = { 'nvim-lua/plenary.nvim' },
     },
 
-    -- {
-    --     'ThePrimeagen/harpoon',
-    --     commit = 'e76cb03',
-    --     dependencies = { 'nvim-lua/plenary.nvim' },
-    -- },
+    {
+        'ThePrimeagen/harpoon',
+        commit = 'e76cb03',
+        dependencies = { 'nvim-lua/plenary.nvim' },
+    },
 
     -- "gc" to comment visual regions/lines
     { 'numToStr/Comment.nvim', opts = {} },
@@ -422,26 +451,26 @@ require('lazy').setup({
     },
 
     -- Fuzzy Finder (files, lsp, etc)
-    {
-        'nvim-telescope/telescope.nvim',
-        branch = '0.1.x',
-        dependencies = {
-            'nvim-lua/plenary.nvim',
-            {
-                'nvim-telescope/telescope-fzf-native.nvim',
-                build = 'make',
-                cond = function()
-                    return vim.fn.executable 'make' == 1
-                end,
-            },
-            {
-                'nvim-telescope/telescope-live-grep-args.nvim',
-                -- This will not install any breaking changes.
-                -- For major updates, this must be adjusted manually.
-                version = '^1.0.0',
-            },
-        },
-    },
+    -- {
+    --     'nvim-telescope/telescope.nvim',
+    --     branch = '0.1.x',
+    --     dependencies = {
+    --         'nvim-lua/plenary.nvim',
+    --         {
+    --             'nvim-telescope/telescope-fzf-native.nvim',
+    --             build = 'make',
+    --             cond = function()
+    --                 return vim.fn.executable 'make' == 1
+    --             end,
+    --         },
+    --         {
+    --             'nvim-telescope/telescope-live-grep-args.nvim',
+    --             -- This will not install any breaking changes.
+    --             -- For major updates, this must be adjusted manually.
+    --             version = '^1.0.0',
+    --         },
+    --     },
+    -- },
 
     {
         'ibhagwan/fzf-lua',
@@ -494,7 +523,7 @@ require('lazy').setup({
 }, {})
 
 -- custom configurations
-require 'plugins/config/telescope'
+-- require 'plugins/config/telescope'
 require 'plugins/config/treesitter'
 require 'plugins/config/lsp'
 require 'plugins/config/dap'
