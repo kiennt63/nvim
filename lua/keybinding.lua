@@ -7,9 +7,6 @@ local harpoon = require 'harpoon'
 
 --Remap space as leader key
 keymap('', '<Space>', '<Nop>', opts)
-vim.g.mapleader = ' '
-vim.g.maplocalleader = ' '
-
 -- Normal --
 
 -- LSP
@@ -208,12 +205,12 @@ end, opts)
 -- Telescope
 -- keymap('n', '<leader>F', '<cmd>Telescope find_files<cr>', opts)
 -- local live_grep_args_shortcuts = require 'telescope-live-grep-args.shortcuts'
--- keymap(
---     'n',
---     '<leader>o',
---     "<cmd>lua require'telescope.builtin'.find_files(require('telescope.themes').get_dropdown({ previewer = false }))<cr>",
---     opts
--- )
+keymap(
+    'n',
+    '<leader>ff',
+    "<cmd>lua require'telescope.builtin'.find_files(require('telescope.themes').get_dropdown({ previewer = false }))<cr>",
+    opts
+)
 -- keymap(
 --     'n',
 --     '<leader>fg',
@@ -250,6 +247,7 @@ keymap('n', '<leader>fr', '<cmd>lua require("fzf-lua").resume()<cr>', opts)
 -- Git workstree
 -- File manager
 keymap('n', '<leader>fq', ':RnvimrToggle<cr>', opts)
+keymap('n', '<leader>e', ':NvimTreeOpen<cr>', opts)
 
 -- Searching
 keymap('v', '//', [[y/\V<c-r>=escape(@",'/\')<cr><cr>]], opts)
