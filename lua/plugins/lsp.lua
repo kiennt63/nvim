@@ -88,7 +88,7 @@ return {
                 end, 'Format')
 
                 -- Lesser used LSP functionality
-                nmap('gD', vim.lsp.buf.declaration, '[G]oto [D]eclaration')
+                nmap('gD', require('fzf-lua').lsp_declarations, '[G]oto [D]eclaration')
                 nmap('<leader>wa', vim.lsp.buf.add_workspace_folder, '[W]orkspace [A]dd Folder')
                 nmap(
                     '<leader>wr',

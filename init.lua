@@ -15,11 +15,16 @@ end
 
 vim.opt.rtp:prepend(lazypath)
 
-require('lazy').setup { import = 'plugins' }
+require('lazy').setup('plugins', {
+    change_detection = {
+        enabled = false,
+        notify = false,
+    },
+})
 
 require 'plugins/config/scheme'
 
-require('options')
-require('autocommands')
-require('keybinding')
-require('highlights')
+require 'options'
+require 'autocommands'
+require 'keybinding'
+require 'highlights'

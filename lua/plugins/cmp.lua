@@ -30,7 +30,29 @@ return {
                 end
             end
 
-            ls.add_snippets(nil, {
+            local function get_path_from_root()
+                local filename = vim.fn.expand '%:t'
+                local filepath = vim.fn.expand '%:p'
+                local root_dir = vim.fn.finddir('.git/..', filepath .. ';')
+
+                if root_dir == '' then
+                    -- Fallback to just filename if no root dir found
+                    return string.upper(filename:gsub('[./]', '_'))
+                end
+
+                -- Get root directory name and sanitize it
+                local root_name = vim.fn.fnamemodify(root_dir, ':t')
+                root_name = root_name:gsub('[%-.]', '_')
+
+                -- Get relative path from root
+                local relative_path = filepath:sub(#root_dir + 2)
+                -- Convert to uppercase and replace special chars with underscore
+                local guard = string.upper(root_name .. '_' .. relative_path:gsub('[./]', '_'))
+
+                return guard
+            end
+
+            ls.add_snippets('python', {
                 all = {
                     s({
                         trig = 'head',
@@ -125,6 +147,24 @@ return {
                     }),
                 },
             })
+            ls.add_snippets('cpp', {
+                s('guard', {
+                    f(function()
+                        return '#ifndef ' .. get_path_from_root()
+                    end),
+                    t { '', '#define ' },
+                    f(function()
+                        return get_path_from_root()
+                    end),
+                    t { '', '', '' },
+                    i(0),
+                    t { '', '', '' },
+                    t { '', '#endif  // ' },
+                    f(function()
+                        return get_path_from_root()
+                    end),
+                }),
+            })
         end,
     },
     version = '*',
@@ -155,6 +195,19 @@ return {
                 end,
             },
             sources = {
+                providers = {
+                    luasnip = {
+                        name = 'Luasnip',
+                        module = 'blink.cmp.sources.luasnip',
+                        score_offset = 1,
+                        opts = {
+                            -- Whether to use show_condition for filtering snippets
+                            use_show_condition = true,
+                            -- Whether to show autosnippets in the completion list
+                            show_autosnippets = true,
+                        },
+                    },
+                },
                 default = { 'luasnip', 'lsp', 'path', 'buffer' },
                 cmdline = {},
             },
@@ -165,7 +218,10 @@ return {
                 -- },
                 -- documentation = { window = { border = 'single' } },
             },
-            -- signature = { window = { border = 'single' } },
+            signature = {
+                enabled = true,
+                -- window = { border = 'single' },
+            },
         }
     end,
 }

@@ -23,7 +23,9 @@ au('FocusLost', {
     pattern = '*',
     callback = function(opts)
         if
-            vim.bo[opts.buf].filetype ~= 'TelescopePrompt'
+            vim.bo[opts.buf].buftype ~= 'prompt'
+            and vim.bo[opts.buf].filetype ~= 'TelescopePrompt'
+            and vim.bo[opts.buf].filetype ~= 'NvimTree'
             and vim.bo[opts.buf].filetype ~= 'neo-tree'
             and vim.bo[opts.buf].filetype ~= 'neo-tree-popup'
             and vim.bo[opts.buf].filetype ~= 'Lazy'
@@ -38,7 +40,9 @@ au('BufLeave', {
     pattern = '*',
     callback = function(opts)
         if
-            vim.bo[opts.buf].filetype ~= 'TelescopePrompt'
+            vim.bo[opts.buf].buftype ~= 'prompt'
+            and vim.bo[opts.buf].filetype ~= 'TelescopePrompt'
+            and vim.bo[opts.buf].filetype ~= 'NvimTree'
             and vim.bo[opts.buf].filetype ~= 'neo-tree'
             and vim.bo[opts.buf].filetype ~= 'neo-tree-popup'
             and vim.bo[opts.buf].filetype ~= 'neo-tree-popup'
@@ -51,6 +55,16 @@ au('BufLeave', {
             and vim.bo[opts.buf].filetype ~= 'harpoon'
         then
             vim.cmd [[ update ]]
+        end
+    end,
+})
+
+-- on :w, if dir is not exist, create the dir also
+au('BufWritePre', {
+    callback = function(args)
+        local dir = vim.fn.fnamemodify(args.file, ':p:h')
+        if not vim.loop.fs_stat(dir) then
+            vim.fn.mkdir(dir, 'p')
         end
     end,
 })

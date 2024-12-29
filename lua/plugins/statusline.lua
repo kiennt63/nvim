@@ -144,6 +144,7 @@ return {
                                 return vim.fn.winwidth(0) > 70
                             end,
                         },
+                        'searchcount',
                         {
                             'filetype',
                             cond = function ()
@@ -151,7 +152,6 @@ return {
                             end,
                         },
                     },
-                    -- lualine_x = {'searchcount'},
                     lualine_y = { 'progress' },
                     lualine_z = {
                         {

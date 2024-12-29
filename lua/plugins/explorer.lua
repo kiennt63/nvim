@@ -190,7 +190,7 @@ return {
                         -- info = "",
                         -- warning = "",
                         -- error = "",
-                        hint = '',
+                        hint = '',
                         info = '',
                         warning = '',
                         error = '',
@@ -240,7 +240,7 @@ return {
 
     {
         'ThePrimeagen/harpoon',
-        commit = 'e76cb03',
+        branch = 'master',
         dependencies = { 'nvim-lua/plenary.nvim' },
         config = function()
             local harpoon = require 'harpoon'
@@ -298,5 +298,4 @@ return {
             'nvim-tree/nvim-web-devicons',
         },
     },
-
 }
