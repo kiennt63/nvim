@@ -143,6 +143,14 @@ return {
             require('fzf-lua').setup {
                 fzf_opts = { ['--cycle'] = true },
                 winopts = {
+                    on_create = function()
+                        vim.keymap.set(
+                            't',
+                            '<C-r>',
+                            [['<C-\><C-N>"'.nr2char(getchar()).'pi']],
+                            { expr = true, buffer = true }
+                        )
+                    end,
                     width = 0.9,
                 },
 

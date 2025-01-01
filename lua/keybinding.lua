@@ -14,11 +14,13 @@ keymap('n', '<leader>lt', ':ClangdSwitchSourceHeader<cr>', opts)
 
 -- debugger
 local dap = require 'dap'
+vim.keymap.set('n', '<leader>df', ':DapPickPythonFile<cr>', opts)
 vim.keymap.set('n', '<leader>dc', dap.continue, opts)
 vim.keymap.set('n', '<leader>dn', dap.step_over, opts)
 vim.keymap.set('n', '<leader>di', dap.step_into, opts)
 vim.keymap.set('n', '<leader>do', dap.step_out, opts)
 vim.keymap.set('n', '<leader>db', dap.toggle_breakpoint, opts)
+vim.keymap.set('n', '<leader>dx', dap.disconnect, opts)
 
 -- Resize with arrows
 -- keymap("n", "<C-Up>", ":resize -2<CR>", opts)
@@ -247,7 +249,7 @@ keymap('n', '<leader>fr', '<cmd>lua require("fzf-lua").resume()<cr>', opts)
 -- Git workstree
 -- File manager
 keymap('n', '<leader>fq', ':RnvimrToggle<cr>', opts)
-keymap('n', '<leader>e', ':NvimTreeOpen<cr>', opts)
+keymap('n', '<leader>e', '<cmd>lua require("oil").toggle_float()<cr>', opts)
 
 -- Searching
 keymap('v', '//', [[y/\V<c-r>=escape(@",'/\')<cr><cr>]], opts)

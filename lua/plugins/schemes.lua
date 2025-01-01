@@ -3,7 +3,7 @@ return {
         'catppuccin/nvim',
         name = 'catppuccin',
         opts = {
-            no_italic = false,
+            no_italic = true,
             background = { -- :h background
                 light = 'latte',
                 dark = 'mocha',
