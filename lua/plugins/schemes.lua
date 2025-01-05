@@ -9,8 +9,8 @@ return {
                 dark = 'mocha',
             },
             transparent_background = true, -- disables setting the background color.
-            no_bold = false, -- Force no bold
-            no_underline = true, -- Force no underline
+            no_bold = false,               -- Force no bold
+            no_underline = true,           -- Force no underline
         },
     },
 
@@ -26,9 +26,25 @@ return {
 
     {
         'sainnhe/everforest',
+        lazy = false,
+        priority = 1000,
+        config = function ()
+            vim.g.everforest_enable_italic = true
+            vim.g.everforest_transparent_background = 1
+        end,
     },
 
     {
-        'kiennt63/gruvbox-material',
+        'sainnhe/gruvbox-material',
+        config = function ()
+            vim.g.gruvbox_material_background = 'medium'
+            vim.g.gruvbox_material_transparent_background = 1
+            vim.g.gruvbox_material_better_performance = 1
+        end,
+        priority = 1000,
+    },
+
+    {
+        'ellisonleao/gruvbox.nvim',
     },
 }

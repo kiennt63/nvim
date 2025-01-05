@@ -8,18 +8,6 @@ g.loaded_netrw = 1
 g.loaded_netrwPlugin = 1
 
 local vim = vim
-g.nord_contrast = true
-g.nord_borders = false
-g.nord_disable_background = true
-g.nord_italic = false
-g.nord_uniform_diff_background = true
-
-g.gruvbox_material_background = 'medium'
-g.gruvbox_material_transparent_background = 1
-g.gruvbox_material_better_performance = 1
-
-g.everforest_transparent_background = 1
-
 o.scrolloff = 10
 o.sessionoptions = 'buffers,curdir,tabpages,winsize'
 -- o.sessionoptions="blank,buffers,curdir,folds,help,tabpages,winsize,winpos,terminal"

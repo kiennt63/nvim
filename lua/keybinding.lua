@@ -133,7 +133,7 @@ keymap('n', '<leader>gp', ':r! cat /tmp/vitmp<CR>', opts)
 
 -- =======================================================
 -- Trouble
-keymap('n', '<leader>t', ':TroubleToggle<cr>', opts)
+-- keymap('n', '<leader>t', ':Trouble diagnostics toggle<cr>', opts)
 
 -- Diagnostic
 keymap(
@@ -209,7 +209,7 @@ end, opts)
 -- local live_grep_args_shortcuts = require 'telescope-live-grep-args.shortcuts'
 keymap(
     'n',
-    '<leader>ff',
+    '<leader>o',
     "<cmd>lua require'telescope.builtin'.find_files(require('telescope.themes').get_dropdown({ previewer = false }))<cr>",
     opts
 )
@@ -236,7 +236,7 @@ keymap(
 -- keymap('n', '<leader>fr', require('telescope.builtin').resume, { desc = '[F]ind [R]resume' })
 
 -- FzfLua
-keymap('n', '<leader>o', "<cmd>lua require('fzf-lua').files()<cr>", opts)
+-- keymap('n', '<leader>o', "<cmd>lua require('fzf-lua').files()<cr>", opts)
 keymap('n', '<leader>fg', "<cmd>lua require('fzf-lua').live_grep()<CR>", opts)
 keymap(
     'n',

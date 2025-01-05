@@ -32,7 +32,7 @@ return {
                         i_del_word = { '<C-w>', 'delete_word', mode = 'i' },
                     },
                     actions = {
-                        delete_word = function()
+                        delete_word = function ()
                             return '<cmd>normal! diw<cr><right>'
                         end,
                     },

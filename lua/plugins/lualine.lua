@@ -144,7 +144,6 @@ return {
                                 return vim.fn.winwidth(0) > 70
                             end,
                         },
-                        'searchcount',
                         {
                             'filetype',
                             cond = function ()
