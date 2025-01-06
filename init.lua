@@ -16,12 +16,11 @@ end
 vim.opt.rtp:prepend(lazypath)
 
 require('lazy').setup('plugins', {
-        enabled = false,
-        change_detection = {
+    enabled = false,
+    change_detection = {
         notify = false,
     },
 })
-
 
 require 'options'
 require 'autocommands'

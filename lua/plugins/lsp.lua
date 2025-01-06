@@ -105,14 +105,6 @@ return {
                 end, { desc = 'Format current buffer with LSP' })
             end
 
-            -- Enable the following language servers
-            --  Feel free to add/remove any LSPs that you want here. They will automatically be installed.
-            --
-            --  Add any additional override configuration in the following tables. They will be passed to
-            --  the `settings` field of the server config. You must look up that documentation yourself.
-            --
-            --  If you want to override the default filetypes that your language server will attach to you can
-            --  define the property 'filetypes' to the map in question.
             local servers = {
                 clangd = {
                     filetypes = {
@@ -230,7 +222,7 @@ return {
                     require('lspconfig')[server_name].setup {
                         capabilities = capabilities,
                         on_attach = on_attach,
-                        settings = servers[server_name],
+                        settings = (servers[server_name] or {}).settings,
                         filetypes = (servers[server_name] or {}).filetypes,
                         cmd = (servers[server_name] or {}).cmd,
                         root_dir = (servers[server_name] or {}).root_dir,

@@ -3,7 +3,7 @@ return {
     dependencies = {
         'L3MON4D3/LuaSnip',
         version = 'v2.*',
-        config = function()
+        config = function ()
             local ls = require 'luasnip'
             -- some shorthands...
             local s = ls.snippet
@@ -20,13 +20,13 @@ return {
 
             local function relative_filepath()
                 local filepath = vim.fn.expand '%:p' -- Get absolute path
-                local cwd = vim.fn.getcwd() -- Get current working directory
+                local cwd = vim.fn.getcwd()          -- Get current working directory
 
                 -- If filepath starts with cwd, make it relative
                 if filepath:sub(1, #cwd) == cwd then
                     return filepath:sub(#cwd + 2) -- Remove cwd and leading slash
                 else
-                    return filepath -- Return absolute path if it can't be made relative
+                    return filepath               -- Return absolute path if it can't be made relative
                 end
             end
 
@@ -52,8 +52,9 @@ return {
                 return guard
             end
 
-            ls.add_snippets('python', {
+            ls.add_snippets(nil, {
                 all = {
+                    s('ipdb', t "__import__('ipdb').set_trace()"),
                     s({
                         trig = 'head',
                         namr = 'omnivision copyright',
@@ -97,7 +98,7 @@ return {
                             {}
                     ]],
                             {
-                                i(1, 'ClassName'), -- Class name
+                                i(1, 'ClassName'),        -- Class name
                                 i(2, 'arg1, arg2, arg3'), -- Constructor arguments
                                 i(
                                     3,
@@ -124,23 +125,23 @@ return {
                         i(1, 'attr'),
                         t { '(self):' },
                         t { '', '    return self.__' },
-                        f(function(args)
+                        f(function (args)
                             return args[1][1]
                         end, { 1 }),
 
                         -- Setter
                         t { '', '', '@' },
-                        f(function(args)
+                        f(function (args)
                             return args[1][1]
                         end, { 1 }),
                         t { '.setter' },
                         t { '', 'def ' },
-                        f(function(args)
+                        f(function (args)
                             return args[1][1]
                         end, { 1 }),
                         t { '(self, value):' },
                         t { '', '    self.__' },
-                        f(function(args)
+                        f(function (args)
                             return args[1][1]
                         end, { 1 }),
                         t { ' = value' },
@@ -149,18 +150,18 @@ return {
             })
             ls.add_snippets('cpp', {
                 s('guard', {
-                    f(function()
+                    f(function ()
                         return '#ifndef ' .. get_path_from_root()
                     end),
                     t { '', '#define ' },
-                    f(function()
+                    f(function ()
                         return get_path_from_root()
                     end),
                     t { '', '', '' },
                     i(0),
                     t { '', '', '' },
                     t { '', '#endif  // ' },
-                    f(function()
+                    f(function ()
                         return get_path_from_root()
                     end),
                 }),
@@ -169,7 +170,7 @@ return {
     },
     version = '*',
     opts_extend = { 'sources.default' },
-    config = function()
+    config = function ()
         require('blink.cmp').setup {
             keymap = {
                 preset = 'enter',
@@ -181,16 +182,16 @@ return {
                 nerd_font_variant = 'normal',
             },
             snippets = {
-                expand = function(snippet)
+                expand = function (snippet)
                     require('luasnip').lsp_expand(snippet)
                 end,
-                active = function(filter)
+                active = function (filter)
                     if filter and filter.direction then
                         return require('luasnip').jumpable(filter.direction)
                     end
                     return require('luasnip').in_snippet()
                 end,
-                jump = function(direction)
+                jump = function (direction)
                     require('luasnip').jump(direction)
                 end,
             },
