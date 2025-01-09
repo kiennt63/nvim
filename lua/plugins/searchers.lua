@@ -134,44 +134,44 @@ return {
             pcall(require('telescope').load_extension, 'git-worktree')
         end,
     },
-    {
-        'ibhagwan/fzf-lua',
-        -- optional for icon support
-        dependencies = { 'nvim-tree/nvim-web-devicons' },
-        config = function()
-            -- calling `setup` is optional for customization
-            require('fzf-lua').setup {
-                fzf_opts = { ['--cycle'] = true },
-                winopts = {
-                    on_create = function()
-                        vim.keymap.set(
-                            't',
-                            '<C-r>',
-                            [['<C-\><C-N>"'.nr2char(getchar()).'pi']],
-                            { expr = true, buffer = true }
-                        )
-                    end,
-                    width = 0.9,
-                },
-
-                files = {
-                    header = false,
-                    git_icons = false,
-                    winopts = {
-                        height = 0.35,
-                        width = 0.4,
-                        preview = {
-                            hidden = 'hidden',
-                        },
-                    },
-                },
-                grep = {
-                    header = false,
-                    rg_glob = true,
-                    glob_flag = '--iglob',
-                    glob_separator = '%s%-%-',
-                },
-            }
-        end,
-    },
+    -- {
+    --     'ibhagwan/fzf-lua',
+    --     -- optional for icon support
+    --     dependencies = { 'nvim-tree/nvim-web-devicons' },
+    --     config = function()
+    --         -- calling `setup` is optional for customization
+    --         require('fzf-lua').setup {
+    --             fzf_opts = { ['--cycle'] = true },
+    --             winopts = {
+    --                 on_create = function()
+    --                     vim.keymap.set(
+    --                         't',
+    --                         '<C-r>',
+    --                         [['<C-\><C-N>"'.nr2char(getchar()).'pi']],
+    --                         { expr = true, buffer = true }
+    --                     )
+    --                 end,
+    --                 width = 0.9,
+    --             },
+    --
+    --             files = {
+    --                 header = false,
+    --                 git_icons = false,
+    --                 winopts = {
+    --                     height = 0.35,
+    --                     width = 0.4,
+    --                     preview = {
+    --                         hidden = 'hidden',
+    --                     },
+    --                 },
+    --             },
+    --             grep = {
+    --                 header = false,
+    --                 rg_glob = true,
+    --                 glob_flag = '--iglob',
+    --                 glob_separator = '%s%-%-',
+    --             },
+    --         }
+    --     end,
+    -- },
 }

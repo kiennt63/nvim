@@ -353,8 +353,11 @@ return {
         'stevearc/aerial.nvim',
         opts = {
             layout = {
+                default_direction = 'left',
                 resize_to_content = false,
                 preserve_equality = true,
+                max_width = { 40, 0.2 },
+                min_width = { 35, 0.25 },
             },
         },
         dependencies = {
