@@ -10,7 +10,7 @@ keymap('', '<Space>', '<Nop>', opts)
 -- Normal --
 
 -- LSP
-keymap('n', '<leader>lt', ':ClangdSwitchSourceHeader<cr>', opts)
+keymap('n', '<leader>lct', ':ClangdSwitchSourceHeader<cr>', opts)
 
 -- debugger
 local dap = require 'dap'
