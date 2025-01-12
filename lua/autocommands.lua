@@ -4,15 +4,15 @@ local au = vim.api.nvim_create_autocmd
 au('TextYankPost', {
     group = ag('yank_highlight', {}),
     pattern = '*',
-    callback = function()
+    callback = function ()
         vim.highlight.on_yank { higroup = 'IncSearch', timeout = 500 }
     end,
 })
 
 au('CmdlineLeave', {
     group = ag('cmd_line_clear', {}),
-    callback = function()
-        vim.fn.timer_start(5000, function()
+    callback = function ()
+        vim.fn.timer_start(5000, function ()
             vim.cmd [[ echon ' ' ]]
         end)
     end,
@@ -21,7 +21,7 @@ au('CmdlineLeave', {
 au('FocusLost', {
     group = ag('save_on_focus_lost', {}),
     pattern = '*',
-    callback = function(opts)
+    callback = function (opts)
         if
             vim.bo[opts.buf].buftype ~= 'prompt'
             and vim.bo[opts.buf].filetype ~= 'TelescopePrompt'
@@ -39,7 +39,7 @@ au('FocusLost', {
 au('BufLeave', {
     group = ag('save_on_buffer_change', {}),
     pattern = '*',
-    callback = function(opts)
+    callback = function (opts)
         if
             vim.bo[opts.buf].buftype ~= 'prompt'
             and vim.bo[opts.buf].filetype ~= 'TelescopePrompt'
@@ -63,7 +63,7 @@ au('BufLeave', {
 
 -- on :w, if dir is not exist, create the dir also
 au('BufWritePre', {
-    callback = function(args)
+    callback = function (args)
         if vim.bo[args.buf].filetype ~= 'oil' then
             local dir = vim.fn.fnamemodify(args.file, ':p:h')
             if not vim.loop.fs_stat(dir) then
@@ -150,3 +150,16 @@ au('BufWritePre', {
 --   command! W lua save_if_changed()
 --   cabbrev w W
 -- ]])
+
+-- add command to copy file path to system clipboard
+vim.api.nvim_create_user_command('CopyAbsoluteFilePath', function ()
+    local filepath = vim.fn.expand '%:p'
+    vim.fn.setreg('+', filepath)
+    print('Copied: ' .. filepath)
+end, {})
+
+vim.api.nvim_create_user_command('CopyFilePath', function ()
+    local filepath = vim.fn.expand '%'
+    vim.fn.setreg('+', filepath)
+    print('Copied: ' .. filepath)
+end, {})
