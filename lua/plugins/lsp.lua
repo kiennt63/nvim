@@ -9,7 +9,7 @@ return {
             {
                 'p00f/clangd_extensions.nvim',
                 lazy = true,
-                config = function() end,
+                config = function () end,
                 opts = {
                     inlay_hints = {
                         inline = false,
@@ -36,26 +36,26 @@ return {
                     },
                 },
             },
-            {
-                'mrcjkb/rustaceanvim',
-                version = '^4', -- Recommended
-                ft = { 'rust' },
-            },
+            -- {
+            --     'mrcjkb/rustaceanvim',
+            --     version = '^4', -- Recommended
+            --     ft = { 'rust' },
+            -- },
         },
-        config = function()
+        config = function ()
             local util = require 'lspconfig/util'
 
-            local on_attach = function(_, bufnr)
+            local on_attach = function (_, bufnr)
                 -- require 'lsp_signature'.on_attach(signature_setup, bufnr)
 
-                local nmap = function(keys, func, desc)
+                local nmap = function (keys, func, desc)
                     if desc then
                         desc = 'LSP: ' .. desc
                     end
                     vim.keymap.set('n', keys, func, { buffer = bufnr, desc = desc })
                 end
 
-                local imap = function(keys, func, desc)
+                local imap = function (keys, func, desc)
                     if desc then
                         desc = 'LSP: ' .. desc
                     end
@@ -65,7 +65,7 @@ return {
                 nmap('<leader>rn', vim.lsp.buf.rename, '[R]e[n]ame')
                 nmap('<leader>la', vim.lsp.buf.code_action, '[C]ode [A]ction')
 
-                nmap('gd', function()
+                nmap('gd', function ()
                     require('fzf-lua').lsp_definitions { jump_to_single_result = true }
                 end, '[G]oto [D]efinition')
                 nmap('gr', require('fzf-lua').lsp_references, '[G]oto [R]eferences')
@@ -83,7 +83,7 @@ return {
                 imap('<C-k>', vim.lsp.buf.signature_help, 'Signature Documentation')
 
                 -- Format code
-                nmap('<space>lf', function()
+                nmap('<space>lf', function ()
                     vim.lsp.buf.format { async = true }
                 end, 'Format')
 
@@ -95,12 +95,12 @@ return {
                     vim.lsp.buf.remove_workspace_folder,
                     '[W]orkspace [R]emove Folder'
                 )
-                nmap('<leader>wl', function()
+                nmap('<leader>wl', function ()
                     print(vim.inspect(vim.lsp.buf.list_workspace_folders()))
                 end, '[W]orkspace [L]ist Folders')
 
                 -- Create a command `:Format` local to the LSP buffer
-                vim.api.nvim_buf_create_user_command(bufnr, 'Format', function(_)
+                vim.api.nvim_buf_create_user_command(bufnr, 'Format', function (_)
                     vim.lsp.buf.format()
                 end, { desc = 'Format current buffer with LSP' })
             end
@@ -218,7 +218,7 @@ return {
             }
 
             mason_lspconfig.setup_handlers {
-                function(server_name)
+                function (server_name)
                     require('lspconfig')[server_name].setup {
                         capabilities = capabilities,
                         on_attach = on_attach,
@@ -228,6 +228,18 @@ return {
                         root_dir = (servers[server_name] or {}).root_dir,
                     }
                 end,
+            }
+
+            require('lspconfig').rust_analyzer.setup {
+                capabilities = capabilities,
+                on_attach = on_attach,
+                settings = {
+                    ['rust-analyzer'] = {
+                        diagnostics = {
+                            enable = false,
+                        },
+                    },
+                },
             }
 
             require('clangd_extensions').setup {
@@ -292,7 +304,7 @@ return {
                     severity = { min = vim.diagnostic.severity.ERROR },
                     prefix = '',
                     suffix = '',
-                    format = function(diagnostic)
+                    format = function (diagnostic)
                         return '● ' .. diagnostic.message .. ' '
                     end,
                 },
@@ -311,7 +323,7 @@ return {
     -- linter, formater
     {
         'nvimtools/none-ls.nvim',
-        config = function()
+        config = function ()
             local null_ls = require 'null-ls'
 
             null_ls.setup {
