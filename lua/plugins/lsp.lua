@@ -65,26 +65,26 @@ return {
                 nmap('<leader>rn', vim.lsp.buf.rename, '[R]e[n]ame')
                 nmap('<leader>la', vim.lsp.buf.code_action, '[C]ode [A]ction')
 
-                nmap('gd', require('telescope.builtin').lsp_definitions, '[G]oto [D]efinition')
-                nmap('gr', require('telescope.builtin').lsp_references, '[G]oto [R]eferences')
+                nmap('gd', require('fzf-lua').lsp_definitions, '[G]oto [D]efinition')
+                nmap('gr', require('fzf-lua').lsp_references, '[G]oto [R]eferences')
                 nmap(
                     'gI',
-                    require('telescope.builtin').lsp_implementations,
+                    require('fzf-lua').lsp_implementations,
                     '[G]oto [I]mplementation'
                 )
                 nmap(
                     '<leader>ld',
-                    require('telescope.builtin').lsp_type_definitions,
+                    require('fzf-lua').lsp_typedefs,
                     'Type [D]efinition'
                 )
                 nmap(
                     '<leader>ds',
-                    require('telescope.builtin').lsp_document_symbols,
+                    require('fzf-lua').lsp_document_symbols,
                     '[D]ocument [S]ymbols'
                 )
                 nmap(
                     '<leader>ws',
-                    require('telescope.builtin').lsp_workspace_symbols,
+                    require('fzf-lua').lsp_workspace_symbols,
                     '[W]orkspace [S]ymbols'
                 )
 
