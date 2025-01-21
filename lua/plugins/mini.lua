@@ -19,13 +19,16 @@ return {
                     suffix_next = 'n',   -- Suffix to search with "next" method
                 },
             }
+            require('mini.files').setup {
+                mappings = {
+                    close = 'q',
+                    synchronize = 'w'
+                }
+            }
             local starter = require 'mini.starter'
             starter.setup {
                 silent = true,
                 evaluate_single = true,
-                -- items = {
-                --     starter.sections.telescope(),
-                -- },
                 items = {
                     {
                         name = 'git',

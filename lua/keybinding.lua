@@ -243,7 +243,7 @@ keymap('n', '<leader>fr', '<cmd>lua require("fzf-lua").resume()<cr>', opts)
 -- Git workstree
 -- File manager
 keymap('n', '<leader>fq', ':RnvimrToggle<cr>', opts)
-keymap('n', '<leader>e', '<cmd>lua require("oil").toggle_float()<cr>', opts)
+keymap('n', '<leader>e', '<cmd>lua MiniFiles.open()<cr>', opts)
 
 -- Searching
 keymap('v', '//', [[y/\V<c-r>=escape(@",'/\')<cr><cr>]], opts)
