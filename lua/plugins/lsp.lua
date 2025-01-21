@@ -136,23 +136,25 @@ return {
                 glsl_analyzer = {},
 
                 lua_ls = {
-                    Lua = {
-                        format = {
-                            enable = false,
-                            -- Put format options here
-                            -- NOTE: the value should be String!
-                            indent_style = 'space',
-                            indent_size = '4',
-                            defaultConfig = {
+                    settings = {
+                        Lua = {
+                            format = {
+                                enable = true,
+                                -- Put format options here
+                                -- NOTE: the value should be String!
                                 indent_style = 'space',
                                 indent_size = '4',
+                                defaultConfig = {
+                                    indent_style = 'space',
+                                    indent_size = '4',
+                                },
                             },
-                        },
-                        workspace = { checkThirdParty = false },
-                        telemetry = { enable = false },
-                        diagnostics = {
-                            -- Get the language server to recognize the `vim` global
-                            globals = { 'vim' },
+                            workspace = { checkThirdParty = false },
+                            telemetry = { enable = false },
+                            diagnostics = {
+                                -- Get the language server to recognize the `vim` global
+                                globals = { 'vim' },
+                            },
                         },
                     },
                 },
@@ -328,7 +330,7 @@ return {
 
             null_ls.setup {
                 sources = {
-                    null_ls.builtins.formatting.stylua,
+                    -- null_ls.builtins.formatting.stylua,
                     -- null_ls.builtins.diagnostics.eslint,
                     -- null_ls.builtins.completion.spell,
                     null_ls.builtins.formatting.black,
