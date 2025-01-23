@@ -48,7 +48,6 @@ return {
                     {
                         name = 'pinned',
                         action = 'lua require("harpoon.ui"):toggle_quick_menu(require("harpoon"):list())',
-                        -- harpoon.ui:toggle_quick_menu(harpoon:list())
                         section = '',
                     },
                     {
@@ -66,6 +65,7 @@ return {
                 footer = '',
                 content_hooks = {
                     starter.gen_hook.adding_bullet(),
+                    -- starter.gen_hook.adding_bullet('', false),
                     starter.gen_hook.aligning('center', 'center'),
                 },
             }
