@@ -7,7 +7,7 @@ return {
             require('mini.pairs').setup()
             require('mini.surround').setup {
                 mappings = {
-                    add = 'ys',          -- Add surrounding in Normal and Visual modes
+                    add = 'co',          -- Add surrounding in Normal and Visual modes
                     delete = 'ds',       -- Delete surrounding
                     find = '',           -- Find surrounding (to the right)
                     find_left = '',      -- Find surrounding (to the left)
