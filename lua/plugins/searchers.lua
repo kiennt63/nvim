@@ -1,4 +1,46 @@
 return {
+    {
+        'ibhagwan/fzf-lua',
+        -- optional for icon support
+        dependencies = { 'nvim-tree/nvim-web-devicons' },
+        config = function ()
+            -- calling `setup` is optional for customization
+            require('fzf-lua').setup {
+                fzf_opts = { ['--cycle'] = true },
+                winopts = {
+                    on_create = function ()
+                        vim.keymap.set(
+                            't',
+                            '<C-r>',
+                            [['<C-\><C-N>"'.nr2char(getchar()).'pi']],
+                            { expr = true, buffer = true }
+                        )
+                    end,
+                    width = 0.9,
+                },
+
+                files = {
+                    formatter = 'path.filename_first',
+                    header = false,
+                    git_icons = false,
+                    winopts = {
+                        height = 0.35,
+                        width = 0.4,
+                        preview = {
+                            hidden = 'hidden',
+                        },
+                    },
+                },
+                grep = {
+                    header = false,
+                    prompt = 'grep ',
+                    rg_glob = true,
+                    glob_flag = '--iglob',
+                    glob_separator = '%s%-%-',
+                },
+            }
+        end,
+    },
     -- {
     --     'nvim-telescope/telescope.nvim',
     --     branch = '0.1.x',
@@ -133,47 +175,5 @@ return {
     --         pcall(require('telescope').load_extension, 'noice')
     --         pcall(require('telescope').load_extension, 'git-worktree')
     --     end,
-    -- },
-    {
-        'ibhagwan/fzf-lua',
-        -- optional for icon support
-        dependencies = { 'nvim-tree/nvim-web-devicons' },
-        config = function ()
-            -- calling `setup` is optional for customization
-            require('fzf-lua').setup {
-                fzf_opts = { ['--cycle'] = true },
-                winopts = {
-                    on_create = function ()
-                        vim.keymap.set(
-                            't',
-                            '<C-r>',
-                            [['<C-\><C-N>"'.nr2char(getchar()).'pi']],
-                            { expr = true, buffer = true }
-                        )
-                    end,
-                    width = 0.9,
-                },
-
-                files = {
-                    formatter = 'path.filename_first',
-                    header = false,
-                    git_icons = false,
-                    winopts = {
-                        height = 0.35,
-                        width = 0.4,
-                        preview = {
-                            hidden = 'hidden',
-                        },
-                    },
-                },
-                grep = {
-                    header = false,
-                    prompt = 'grep ',
-                    rg_glob = true,
-                    glob_flag = '--iglob',
-                    glob_separator = '%s%-%-',
-                },
-            }
-        end,
-    },
+    -- }
 }
