@@ -10,7 +10,10 @@ return {
                 },
                 opts = {
                     icon = '',
-                    max_length = 20,
+                    max_length = 7,
+                    separator_left = ' ',
+                    separator_right = '',
+                    reverse_order = true
                 },
             },
         },
@@ -29,8 +32,6 @@ return {
                     -- component_separators = { left = separator_glyphs.close, right = separator_glyphs.open },
                     component_separators = { left = '', right = '' },
                     -- section_separators = { left = '', right = ''},
-                    -- component_separators = { left = '', right = '' },
-                    -- section_separators = { left = '', right = '' },
                     disabled_filetypes = {
                         'alpha',
                         'starter',
@@ -144,12 +145,12 @@ return {
                                 return vim.fn.winwidth(0) > 70
                             end,
                         },
-                        {
-                            'filetype',
-                            cond = function ()
-                                return vim.fn.winwidth(0) > 70
-                            end,
-                        },
+                        -- {
+                        --     'filetype',
+                        --     cond = function ()
+                        --         return vim.fn.winwidth(0) > 70
+                        --     end,
+                        -- },
                     },
                     lualine_y = { 'progress' },
                     lualine_z = {
