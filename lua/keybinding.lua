@@ -239,6 +239,7 @@ keymap(
     opts
 )
 keymap('n', '<leader>fr', '<cmd>lua require("fzf-lua").resume()<cr>', opts)
+keymap('n', '<leader>fd', '<cmd>FzfLuaIpdb<cr>', opts)
 
 -- Git workstree
 -- File manager
