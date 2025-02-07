@@ -14,7 +14,7 @@ keymap('n', '<leader>lct', ':ClangdSwitchSourceHeader<cr>', opts)
 
 -- debugger
 local dap = require 'dap'
-vim.keymap.set('n', '<leader>df', ':DapPickPythonFile<cr>', opts)
+vim.keymap.set('n', '<leader>df', '<cmd>DapPickPythonFile<cr>', opts)
 vim.keymap.set('n', '<leader>dc', dap.continue, opts)
 vim.keymap.set('n', '<leader>dn', dap.step_over, opts)
 vim.keymap.set('n', '<leader>di', dap.step_into, opts)

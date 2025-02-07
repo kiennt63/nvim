@@ -6,18 +6,18 @@ return {
         'rcarriga/nvim-dap-ui',
         'nvim-neotest/nvim-nio',
     },
-    config = function()
+    config = function ()
         local dap, dapui = require 'dap', require 'dapui'
-        dap.listeners.before.attach.dapui_config = function()
+        dap.listeners.before.attach.dapui_config = function ()
             dapui.open()
         end
-        dap.listeners.before.launch.dapui_config = function()
+        dap.listeners.before.launch.dapui_config = function ()
             dapui.open()
         end
-        dap.listeners.before.event_terminated.dapui_config = function()
+        dap.listeners.before.event_terminated.dapui_config = function ()
             dapui.close()
         end
-        dap.listeners.before.event_exited.dapui_config = function()
+        dap.listeners.before.event_exited.dapui_config = function ()
             dapui.close()
         end
 
@@ -65,63 +65,44 @@ return {
 
         require('dap-python').setup 'python'
 
-        dap.listeners.before.attach.dapui_config = function()
+        dap.listeners.before.attach.dapui_config = function ()
             dapui.open()
-            vim.keymap.set('n', '<A-S-n>', function()
+            vim.keymap.set('n', '<A-S-n>', function ()
                 dap.step_over()
             end, { silent = true, buffer = true })
-            vim.keymap.set('n', '<A-S-i>', function()
+            vim.keymap.set('n', '<A-S-i>', function ()
                 dap.step_into()
             end, { silent = true, buffer = true })
-            vim.keymap.set('n', '<A-S-o>', function()
+            vim.keymap.set('n', '<A-S-o>', function ()
                 dap.step_out()
             end, { silent = true, buffer = true })
-            vim.keymap.set('n', 'K', function()
+            vim.keymap.set('n', 'K', function ()
                 dapui.eval()
             end, { silent = true, buffer = true })
         end
-        dap.listeners.before.launch.dapui_config = function()
-            vim.keymap.set('n', '<A-S-n>', function()
+        dap.listeners.before.launch.dapui_config = function ()
+            vim.keymap.set('n', '<A-S-n>', function ()
                 dap.step_over()
             end, { silent = true, buffer = true })
-            vim.keymap.set('n', '<A-S-i>', function()
+            vim.keymap.set('n', '<A-S-i>', function ()
                 dap.step_into()
             end, { silent = true, buffer = true })
-            vim.keymap.set('n', '<A-S-o>', function()
+            vim.keymap.set('n', '<A-S-o>', function ()
                 dap.step_out()
             end, { silent = true, buffer = true })
-            vim.keymap.set('n', 'K', function()
+            vim.keymap.set('n', 'K', function ()
                 dapui.eval()
             end, { silent = true, buffer = true })
             dapui.open()
         end
-        dap.listeners.before.event_terminated.dapui_config = function()
+        dap.listeners.before.event_terminated.dapui_config = function ()
             vim.keymap.set('n', 'K', vim.lsp.buf.hover, { silent = true, buffer = true })
             dapui.close()
         end
-        dap.listeners.before.event_exited.dapui_config = function()
+        dap.listeners.before.event_exited.dapui_config = function ()
             vim.keymap.set('n', 'K', vim.lsp.buf.hover, { silent = true, buffer = true })
             dapui.close()
         end
-
-        -- Create a function to pick and debug a file
-        local function pick_python_file()
-            require('fzf-lua').files {
-                prompt = 'Select Python File> ',
-                git_icons = false,
-                file_icons = false,
-                color_icons = false,
-                fd_opts = '--type f --extension py',
-                actions = {
-                    ['default'] = function(items)
-                        vim.cmd('edit ' .. items[1])
-                        require('dap').continue()
-                    end,
-                },
-            }
-        end
-
-        vim.api.nvim_create_user_command('DapPickPythonFile', pick_python_file, {})
 
         -- vim.api.nvim_create_autocmd('BufEnter', {
         --     group = vim.api.nvim_create_augroup('DAPKeymap', { clear = true }),

@@ -163,3 +163,49 @@ vim.api.nvim_create_user_command('CopyFilePath', function ()
     vim.fn.setreg('+', filepath)
     print('Copied: ' .. filepath)
 end, {})
+
+-- grep for `ipdb`, ctrl-o toggle comment on line of matches
+vim.api.nvim_create_user_command('FzfLuaIpdb', function ()
+    require('fzf-lua').grep({
+        search = 'ipdb',
+        file_icons = false,
+        rg_opts =
+        '--sort-files --hidden --no-ignore --column --line-number --no-heading --color=always --smart-case --max-columns=4096 -e',
+        actions = {
+            ['ctrl-o'] = {
+                fn = function (selected)
+                    local path, lineno = selected[1]:match('^(.-):(%d+):')
+                    if path and lineno then
+                        local bufnr = vim.fn.bufnr(path, true)
+                        if bufnr == -1 then return end
+                        vim.fn.bufload(bufnr)
+
+                        -- Run the comment toggle inside the correct buffer
+                        vim.api.nvim_buf_call(bufnr, function ()
+                            vim.cmd(string.format('%dnorm gcc', tonumber(lineno)))
+                            vim.cmd('write')
+                        end)
+                    end
+                end,
+                reload = true
+            }
+        },
+    })
+end, {})
+
+vim.api.nvim_create_user_command('DapPickPythonFile', function ()
+    require('fzf-lua').files {
+        prompt = 'dap entry ',
+        formatter = 'path.dirname_first',
+        git_icons = false,
+        file_icons = false,
+        color_icons = false,
+        fd_opts = '--type f --extension py',
+        actions = {
+            ['default'] = function (selected)
+                vim.cmd('edit ' .. selected[1])
+                require('dap').continue()
+            end,
+        },
+    }
+end, {})
