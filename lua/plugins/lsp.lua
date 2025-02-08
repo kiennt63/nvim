@@ -9,32 +9,54 @@ return {
             {
                 'p00f/clangd_extensions.nvim',
                 lazy = true,
-                config = function () end,
-                opts = {
-                    inlay_hints = {
-                        inline = false,
-                    },
-                    ast = {
-                        --These require codicons (https://github.com/microsoft/vscode-codicons)
-                        role_icons = {
-                            type = '',
-                            declaration = '',
-                            expression = '',
-                            specifier = '',
-                            statement = '',
-                            ['template argument'] = '',
+                config = function ()
+                    require('clangd_extensions').setup({
+                        inlay_hints = {
+                            inline = vim.fn.has 'nvim-0.10' == 1,
+                            only_current_line = false,
+                            only_current_line_autocmd = { 'CursorHold' },
+                            show_parameter_hints = true,
+                            parameter_hints_prefix = '<- ',
+                            other_hints_prefix = '=> ',
+                            max_len_align = false,
+                            max_len_align_padding = 1,
+                            right_align = false,
+                            right_align_padding = 7,
+                            highlight = 'Comment',
+                            priority = 100,
                         },
-                        kind_icons = {
-                            Compound = '',
-                            Recovery = '',
-                            TranslationUnit = '',
-                            PackExpansion = '',
-                            TemplateTypeParm = '',
-                            TemplateTemplateParm = '',
-                            TemplateParamObject = '',
+                        ast = {
+                            role_icons = {
+                                type = '',
+                                declaration = '',
+                                expression = '',
+                                specifier = '',
+                                statement = '',
+                                ['template argument'] = '',
+                            },
+
+                            kind_icons = {
+                                Compound = '',
+                                Recovery = '',
+                                TranslationUnit = '',
+                                PackExpansion = '',
+                                TemplateTypeParm = '',
+                                TemplateTemplateParm = '',
+                                TemplateParamObject = '',
+                            },
+
+                            highlights = {
+                                detail = 'Comment',
+                            },
                         },
-                    },
-                },
+                        memory_usage = {
+                            border = 'none',
+                        },
+                        symbol_info = {
+                            border = 'none',
+                        },
+                    })
+                end,
             },
             -- {
             --     'mrcjkb/rustaceanvim',
@@ -42,12 +64,37 @@ return {
             --     ft = { 'rust' },
             -- },
         },
-        config = function ()
+        opts = {
+            diagnostics = {
+                underline = {
+                    severity = { min = vim.diagnostic.severity.ERROR },
+                },
+                update_in_insert = false,
+                virtual_text = {
+                    severity = { min = vim.diagnostic.severity.ERROR },
+                    spacing = 4,
+                    source = 'if_many',
+                    prefix = '●',
+                },
+                severity_sort = true,
+                signs = {
+                    text = {
+                        [vim.diagnostic.severity.ERROR] = '',
+                        [vim.diagnostic.severity.WARN] = '',
+                        [vim.diagnostic.severity.HINT] = '',
+                        [vim.diagnostic.severity.INFO] = '',
+                    },
+                },
+                --     severity = {
+                --         ['unused-local'] = vim.diagnostic.severity.HINT,
+                --     },
+            }
+        },
+
+        config = function (_, opts)
             local util = require 'lspconfig/util'
 
             local on_attach = function (_, bufnr)
-                -- require 'lsp_signature'.on_attach(signature_setup, bufnr)
-
                 local nmap = function (keys, func, desc)
                     if desc then
                         desc = 'LSP: ' .. desc
@@ -62,8 +109,8 @@ return {
                     vim.keymap.set('i', keys, func, { buffer = bufnr, desc = desc })
                 end
 
-                nmap('<leader>rn', vim.lsp.buf.rename, '[R]e[n]ame')
-                nmap('<leader>la', vim.lsp.buf.code_action, '[C]ode [A]ction')
+                nmap('<leader>lr', vim.lsp.buf.rename, '[L]SP [R]ename')
+                nmap('<leader>la', vim.lsp.buf.code_action, '[L]SP Code [A]ction')
 
                 nmap('gd', function ()
                     require('fzf-lua').lsp_definitions { jump_to_single_result = true }
@@ -87,7 +134,6 @@ return {
                     vim.lsp.buf.format { async = true }
                 end, 'Format')
 
-                -- Lesser used LSP functionality
                 nmap('gD', require('fzf-lua').lsp_declarations, '[G]oto [D]eclaration')
                 nmap('<leader>wa', vim.lsp.buf.add_workspace_folder, '[W]orkspace [A]dd Folder')
                 nmap(
@@ -140,8 +186,6 @@ return {
                         Lua = {
                             format = {
                                 enable = true,
-                                -- Put format options here
-                                -- NOTE: the value should be String!
                                 indent_style = 'space',
                                 indent_size = '4',
                                 defaultConfig = {
@@ -204,6 +248,15 @@ return {
                         },
                     },
                 },
+                rust_analyzer = {
+                    settings = {
+                        ['rust-analyzer'] = {
+                            diagnostics = {
+                                enable = false,
+                            },
+                        },
+                    },
+                }
             }
 
             -- Setup neovim lua configuration
@@ -219,106 +272,55 @@ return {
                 -- ensure_installed = vim.tbl_keys(servers),
             }
 
-            mason_lspconfig.setup_handlers {
-                function (server_name)
-                    require('lspconfig')[server_name].setup {
-                        capabilities = capabilities,
-                        on_attach = on_attach,
-                        settings = (servers[server_name] or {}).settings,
-                        filetypes = (servers[server_name] or {}).filetypes,
-                        cmd = (servers[server_name] or {}).cmd,
-                        root_dir = (servers[server_name] or {}).root_dir,
-                    }
-                end,
-            }
+            local function setup(server)
+                local server_opts = vim.tbl_deep_extend('force', {
+                    capabilities = vim.deepcopy(capabilities),
+                    on_attach = on_attach,
+                }, servers[server] or {})
 
-            require('lspconfig').rust_analyzer.setup {
-                capabilities = capabilities,
-                on_attach = on_attach,
-                settings = {
-                    ['rust-analyzer'] = {
-                        diagnostics = {
-                            enable = false,
-                        },
-                    },
-                },
-            }
-
-            require('clangd_extensions').setup {
-                inlay_hints = {
-                    inline = vim.fn.has 'nvim-0.10' == 1,
-                    only_current_line = false,
-                    only_current_line_autocmd = { 'CursorHold' },
-                    show_parameter_hints = true,
-                    parameter_hints_prefix = '<- ',
-                    other_hints_prefix = '=> ',
-                    max_len_align = false,
-                    max_len_align_padding = 1,
-                    right_align = false,
-                    right_align_padding = 7,
-                    highlight = 'Comment',
-                    priority = 100,
-                },
-                ast = {
-                    role_icons = {
-                        type = '',
-                        declaration = '',
-                        expression = '',
-                        specifier = '',
-                        statement = '',
-                        ['template argument'] = '',
-                    },
-
-                    kind_icons = {
-                        Compound = '',
-                        Recovery = '',
-                        TranslationUnit = '',
-                        PackExpansion = '',
-                        TemplateTypeParm = '',
-                        TemplateTemplateParm = '',
-                        TemplateParamObject = '',
-                    },
-
-                    highlights = {
-                        detail = 'Comment',
-                    },
-                },
-                memory_usage = {
-                    border = 'none',
-                },
-                symbol_info = {
-                    border = 'none',
-                },
-            }
-
-            local signs = { Error = '', Warn = '', Hint = '', Info = '' }
-            for type, icon in pairs(signs) do
-                local hl = 'DiagnosticSign' .. type
-                vim.fn.sign_define(hl, { text = icon, texthl = hl, numhl = hl })
+                require('lspconfig')[server].setup(server_opts)
             end
 
-            vim.diagnostic.config {
-                severity_sort = true,
-                underline = {
-                    severity = { min = vim.diagnostic.severity.ERROR },
-                },
-                virtual_text = {
-                    severity = { min = vim.diagnostic.severity.ERROR },
-                    prefix = '',
-                    suffix = '',
-                    format = function (diagnostic)
-                        return '● ' .. diagnostic.message .. ' '
-                    end,
-                },
-                float = {
-                    source = 'always',
-                },
-                signs = true,
-                update_in_insert = false,
-                severity = {
-                    ['unused-local'] = vim.diagnostic.severity.HINT,
-                },
-            }
+
+            for server, server_opts in pairs(servers) do
+                if server_opts then
+                    server_opts = server_opts == true and {} or server_opts
+                    if server_opts.enabled ~= false then
+                        setup(server)
+                        -- -- run manual setup if mason=false or if this is a server that cannot be installed with mason-lspconfig
+                        -- if server_opts.mason == false or not vim.tbl_contains(all_mslp_servers, server) then
+                        -- else
+                        --     ensure_installed[#ensure_installed + 1] = server
+                        -- end
+                    end
+                end
+            end
+
+            -- mason_lspconfig.setup_handlers {
+            --     function (server_name)
+            --         require('lspconfig')[server_name].setup {
+            --             capabilities = capabilities,
+            --             on_attach = on_attach,
+            --             settings = (servers[server_name] or {}).settings,
+            --             filetypes = (servers[server_name] or {}).filetypes,
+            --             cmd = (servers[server_name] or {}).cmd,
+            --             root_dir = (servers[server_name] or {}).root_dir,
+            --         }
+            --     end,
+            -- }
+
+            -- diagnostics signs
+            if vim.fn.has('nvim-0.10.0') == 0 then
+                if type(opts.diagnostics.signs) ~= 'boolean' then
+                    for severity, icon in pairs(opts.diagnostics.signs.text) do
+                        local name = vim.diagnostic.severity[severity]:lower():gsub('^%l', string.upper)
+                        name = 'DiagnosticSign' .. name
+                        vim.fn.sign_define(name, { text = icon, texthl = name, numhl = '' })
+                    end
+                end
+            end
+
+            vim.diagnostic.config(vim.deepcopy(opts.diagnostics))
         end,
     },
 
@@ -341,13 +343,6 @@ return {
                 },
             }
         end,
-    },
-    {
-        'folke/trouble.nvim',
-        dependencies = { 'nvim-tree/nvim-web-devicons' },
-        opts = {
-            position = 'right',
-        },
     },
 
     -- diagnostics
