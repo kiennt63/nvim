@@ -17,6 +17,7 @@ return {
                 'lua',
                 'python',
                 'rust',
+                'zig',
                 'javascript',
                 'vimdoc',
                 'vim',

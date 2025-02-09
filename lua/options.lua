@@ -1,7 +1,7 @@
-local o = vim.o
+local o  = vim.o
 local bo = vim.bo
-local wo  = vim.wo
-local g = vim.g
+local wo = vim.wo
+local g  = vim.g
 
 
 g.loaded_netrw = 1
@@ -23,7 +23,7 @@ o.undodir = vim.fn.stdpath('data') .. '/undodir'
 o.undofile = true
 o.incsearch = true
 o.hidden = true
-o.completeopt='menuone,noinsert,noselect'
+o.completeopt = 'menuone,noinsert,noselect'
 o.tabstop = 4
 o.softtabstop = 4
 o.shiftwidth = 4
@@ -34,7 +34,7 @@ o.autowriteall = true
 o.pumheight = 15
 o.splitright = true
 
-vim.opt.fillchars = { eob = " "}
+vim.opt.fillchars = { eob = ' ' }
 
 -- bo.autoindent = true
 -- bo.smartindent = true
@@ -50,3 +50,5 @@ wo.wrap = true
 vim.api.nvim_command [[autocmd FileType * setlocal formatoptions-=o]] -- equivalent to set formatoptions-=cro
 -- vim.opt.list = true
 -- vim.opt.listchars:append "space:⋅"
+
+g.zig_fmt_autosave = 0
