@@ -7,6 +7,7 @@ return {
             -- calling `setup` is optional for customization
             require('fzf-lua').setup {
                 fzf_opts = { ['--cycle'] = true },
+                file_icon_padding = ' ',
                 winopts = {
                     title_flags = false,
                     on_create = function ()
