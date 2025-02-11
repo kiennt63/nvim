@@ -106,45 +106,45 @@ return {
                         {
                             harpoon_files.lualine_component,
                         },
-                        {
-                            function (msg)
-                                msg = msg or 'lsp inactive'
-                                local buf_clients = vim.lsp.get_active_clients()
-                                if next(buf_clients) == nil then
-                                    -- TODO: clean up this if statement
-                                    if type(msg) == 'boolean' or #msg == 0 then
-                                        return 'nolang'
-                                    end
-                                    return msg
-                                end
-                                local buf_ft = vim.bo.filetype
-                                local buf_client_names = {}
-
-                                -- add client
-                                for _, client in pairs(buf_clients) do
-                                    if client.name ~= 'null-ls' then
-                                        table.insert(buf_client_names, client.name)
-                                    end
-                                end
-
-                                -- add formatter
-                                local formatters = require 'lvim.lsp.null-ls.formatters'
-                                local supported_formatters = formatters.list_registered(buf_ft)
-                                vim.list_extend(buf_client_names, supported_formatters)
-
-                                -- add linter
-                                local linters = require 'lvim.lsp.null-ls.linters'
-                                local supported_linters = linters.list_registered(buf_ft)
-                                vim.list_extend(buf_client_names, supported_linters)
-
-                                local unique_client_names = vim.fn.uniq(buf_client_names)
-                                return '[' .. table.concat(unique_client_names, ', ') .. ']'
-                            end,
-                            color = { gui = 'bold' },
-                            cond = function ()
-                                return vim.fn.winwidth(0) > 70
-                            end,
-                        },
+                        -- {
+                        --     function (msg)
+                        --         msg = msg or 'lsp inactive'
+                        --         local buf_clients = vim.lsp.get_active_clients()
+                        --         if next(buf_clients) == nil then
+                        --             -- TODO: clean up this if statement
+                        --             if type(msg) == 'boolean' or #msg == 0 then
+                        --                 return 'nolang'
+                        --             end
+                        --             return msg
+                        --         end
+                        --         local buf_ft = vim.bo.filetype
+                        --         local buf_client_names = {}
+                        --
+                        --         -- add client
+                        --         for _, client in pairs(buf_clients) do
+                        --             if client.name ~= 'null-ls' then
+                        --                 table.insert(buf_client_names, client.name)
+                        --             end
+                        --         end
+                        --
+                        --         -- add formatter
+                        --         local formatters = require 'lvim.lsp.null-ls.formatters'
+                        --         local supported_formatters = formatters.list_registered(buf_ft)
+                        --         vim.list_extend(buf_client_names, supported_formatters)
+                        --
+                        --         -- add linter
+                        --         local linters = require 'lvim.lsp.null-ls.linters'
+                        --         local supported_linters = linters.list_registered(buf_ft)
+                        --         vim.list_extend(buf_client_names, supported_linters)
+                        --
+                        --         local unique_client_names = vim.fn.uniq(buf_client_names)
+                        --         return '[' .. table.concat(unique_client_names, ', ') .. ']'
+                        --     end,
+                        --     color = { gui = 'bold' },
+                        --     cond = function ()
+                        --         return vim.fn.winwidth(0) > 70
+                        --     end,
+                        -- },
                         -- {
                         --     'filetype',
                         --     cond = function ()
@@ -167,8 +167,8 @@ return {
                 inactive_sections = {
                     lualine_a = {},
                     lualine_b = {},
-                    lualine_c = { 'filename' },
-                    lualine_x = { 'location' },
+                    lualine_c = {},
+                    lualine_x = {},
                     lualine_y = {},
                     lualine_z = {},
                 },
