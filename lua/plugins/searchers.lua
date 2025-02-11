@@ -8,6 +8,7 @@ return {
             require('fzf-lua').setup {
                 fzf_opts = { ['--cycle'] = true },
                 winopts = {
+                    title_flags = false,
                     on_create = function ()
                         vim.keymap.set(
                             't',
@@ -22,12 +23,14 @@ return {
                 files = {
                     formatter = 'path.filename_first',
                     prompt = 'file ',
+                    title = false,
                     cwd_prompt = false,
                     header = false,
                     git_icons = false,
                     winopts = {
+                        title = false,
                         height = 0.35,
-                        width = 0.4,
+                        width = 0.35,
                         preview = {
                             hidden = 'hidden',
                         },
@@ -36,9 +39,13 @@ return {
                 grep = {
                     header = false,
                     prompt = 'grep ',
+                    title = false,
                     rg_glob = true,
                     glob_flag = '--iglob',
                     glob_separator = '%s%-%-',
+                    winopts = {
+                        title = false,
+                    },
                 },
 
                 keymap = {
