@@ -10,6 +10,7 @@ return {
                 file_icon_padding = ' ',
                 winopts = {
                     title_flags = false,
+                    border = 'single',
                     on_create = function ()
                         vim.keymap.set(
                             't',
