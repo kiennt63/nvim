@@ -75,5 +75,26 @@ return {
                 },
             })
         end
-    }
+    },
+    {
+        'thesimonho/kanagawa-paper.nvim',
+        lazy = false,
+        priority = 1000,
+        opts = {
+            -- undercurl = true,
+            transparent = true,
+            gutter = false,
+            dimInactive = false, -- disabled when transparent
+            terminalColors = true,
+            commentStyle = { italic = true },
+            functionStyle = { italic = false, bold = true, },
+            keywordStyle = { italic = true, bold = false },
+            statementStyle = { italic = false, bold = false },
+            typeStyle = { italic = false },
+            colors = { theme = {}, palette = {} }, -- override default palette and theme colors
+            overrides = function ()      -- override highlight groups
+                return {}
+            end,
+        },
+    },
 }

@@ -1,7 +1,7 @@
-vim.cmd.colorscheme 'kanagawa'
+vim.cmd.colorscheme 'kanagawa-paper'
 
-vim.api.nvim_set_hl(0, 'LineNr', { bg = 'None' })
-vim.api.nvim_set_hl(0, 'SignColumn', { bg = 'None' })
+-- vim.api.nvim_set_hl(0, 'LineNr', { bg = 'None' })
+-- vim.api.nvim_set_hl(0, 'SignColumn', { bg = 'None' })
 vim.api.nvim_set_hl(0, 'StatusLine', { bg = 'None' })
 vim.api.nvim_set_hl(0, 'StatusLineNC', { bg = 'None' })
 -- vim.api.nvim_set_hl(0, 'NvimTreeEndOfBuffer', { link = 'None' })

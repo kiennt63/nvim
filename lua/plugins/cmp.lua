@@ -1,5 +1,6 @@
 return {
     'saghen/blink.cmp',
+    tag = 'v0.10.0',
     dependencies = {
         'L3MON4D3/LuaSnip',
         version = 'v2.*',
@@ -180,7 +181,21 @@ return {
             },
             snippets = { preset = 'luasnip' },
             sources = {
-                default = { 'snippets', 'lsp', 'path', 'buffer' },
+                providers = {
+                    snippets = {
+                        score_offset = 4,
+                    },
+                    lsp = {
+                        score_offset = 3,
+                    },
+                    path = {
+                        score_offset = 2,
+                    },
+                    buffer = {
+                        score_offset = 0,
+                    },
+                },
+                default = { 'snippets', 'path', 'buffer', 'lsp', },
                 cmdline = {},
             },
 
