@@ -219,10 +219,10 @@ return {
                     settings = {
                         pylsp = {
                             plugins = {
-                                jedi_completion = {
-                                    include_params = true,
-                                },
-                                jedi_signature_help = { enabled = true },
+                                -- jedi_completion = {
+                                --     include_params = true,
+                                -- },
+                                -- jedi_signature_help = { enabled = true },
                                 pyflakes = { enabled = true },
                                 pylint = {
                                     args = { '--ignore=E501,E231', '-' },

@@ -3,7 +3,7 @@ return {
     dependencies = {
         'L3MON4D3/LuaSnip',
         version = 'v2.*',
-        config = function()
+        config = function ()
             local ls = require 'luasnip'
             -- some shorthands...
             local s = ls.snippet
@@ -20,13 +20,13 @@ return {
 
             local function relative_filepath()
                 local filepath = vim.fn.expand '%:p' -- Get absolute path
-                local cwd = vim.fn.getcwd() -- Get current working directory
+                local cwd = vim.fn.getcwd()          -- Get current working directory
 
                 -- If filepath starts with cwd, make it relative
                 if filepath:sub(1, #cwd) == cwd then
                     return filepath:sub(#cwd + 2) -- Remove cwd and leading slash
                 else
-                    return filepath -- Return absolute path if it can't be made relative
+                    return filepath               -- Return absolute path if it can't be made relative
                 end
             end
 
@@ -57,18 +57,18 @@ return {
             })
             ls.add_snippets('cpp', {
                 s('guard', {
-                    f(function()
+                    f(function ()
                         return '#ifndef ' .. get_path_from_root()
                     end),
                     t { '', '#define ' },
-                    f(function()
+                    f(function ()
                         return get_path_from_root()
                     end),
                     t { '', '', '' },
                     i(0),
                     t { '', '', '' },
                     t { '', '#endif  // ' },
-                    f(function()
+                    f(function ()
                         return get_path_from_root()
                     end),
                 }),
@@ -118,7 +118,7 @@ return {
                             {}
                     ]],
                         {
-                            i(1, 'ClassName'), -- Class name
+                            i(1, 'ClassName'),        -- Class name
                             i(2, 'arg1, arg2, arg3'), -- Constructor arguments
                             i(
                                 3,
@@ -141,23 +141,23 @@ return {
                     i(1, 'attr'),
                     t { '(self):' },
                     t { '', '    return self.__' },
-                    f(function(args)
+                    f(function (args)
                         return args[1][1]
                     end, { 1 }),
 
                     -- Setter
                     t { '', '', '@' },
-                    f(function(args)
+                    f(function (args)
                         return args[1][1]
                     end, { 1 }),
                     t { '.setter' },
                     t { '', 'def ' },
-                    f(function(args)
+                    f(function (args)
                         return args[1][1]
                     end, { 1 }),
                     t { '(self, value):' },
                     t { '', '    self.__' },
-                    f(function(args)
+                    f(function (args)
                         return args[1][1]
                     end, { 1 }),
                     t { ' = value' },
@@ -167,7 +167,7 @@ return {
     },
     version = '*',
     opts_extend = { 'sources.default' },
-    config = function()
+    config = function ()
         require('blink.cmp').setup {
             keymap = {
                 preset = 'enter',
@@ -191,13 +191,38 @@ return {
                         auto_insert = true,
                     },
                 },
-                -- menu = {
-                --     border = 'single',
-                -- },
+                menu = {
+                    draw = {
+                        gap = 0,
+                        components = {
+
+                            kind = {
+                                width = {
+                                    max = 30,
+                                }
+                            },
+                            label = {
+                                width = {
+                                    fill = true, max = 30,
+                                }
+                            },
+                            label_description = {
+                                width = {
+                                    max = 30,
+                                }
+                            },
+                            source_name = {
+                                width = {
+                                    max = 30,
+                                }
+                            },
+                        }
+                    }
+                },
                 -- documentation = { window = { border = 'single' } },
             },
             signature = {
-                enabled = false,
+                enabled = true,
                 -- window = { border = 'single' },
             },
         }

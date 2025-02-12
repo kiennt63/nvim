@@ -188,6 +188,23 @@ vim.api.nvim_create_user_command('FzfLuaIpdb', function ()
                     end
                 end,
                 reload = true
+            },
+            ['ctrl-x'] = {
+                fn = function (selected)
+                    local path, lineno = selected[1]:match('^(.-):(%d+):')
+                    if path and lineno then
+                        local bufnr = vim.fn.bufnr(path, true)
+                        if bufnr == -1 then return end
+                        vim.fn.bufload(bufnr)
+
+                        -- Run the comment toggle inside the correct buffer
+                        vim.api.nvim_buf_call(bufnr, function ()
+                            vim.cmd(string.format('%dnorm dd', tonumber(lineno)))
+                            vim.cmd('write')
+                        end)
+                    end
+                end,
+                reload = true
             }
         },
     })
