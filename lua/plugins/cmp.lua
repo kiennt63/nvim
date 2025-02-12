@@ -182,10 +182,10 @@ return {
             snippets = { preset = 'luasnip' },
             sources = {
                 providers = {
-                    snippets = {
+                    lsp = {
                         score_offset = 4,
                     },
-                    lsp = {
+                    snippets = {
                         score_offset = 3,
                     },
                     path = {
