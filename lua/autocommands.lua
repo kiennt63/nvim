@@ -164,6 +164,57 @@ vim.api.nvim_create_user_command('CopyFilePath', function ()
     print('Copied: ' .. filepath)
 end, {})
 
+-- command to search and replace, not use tho
+-- vim.api.nvim_create_user_command('FzfLuaReplace', function (opts)
+--     local replacement_string = opts.args
+--
+--     if not replacement_string or replacement_string == '' then
+--         print('Error: Replacement string cannot be empty')
+--         return
+--     end
+--     print(replacement_string)
+--
+--     -- Prompt user for grep_string
+--     vim.ui.input({ prompt = 'Enter grep search string: ' }, function (grep_string)
+--         if not grep_string or grep_string == '' then
+--             print('Error: Search string cannot be empty')
+--             return
+--         end
+--         print(grep_string)
+--         require('fzf-lua').grep({
+--             search = grep_string,
+--             file_icons = false,
+--             rg_opts =
+--             '--sort-files --hidden --no-ignore --column --line-number --no-heading --color=always --smart-case --max-columns=4096 -e',
+--             actions = {
+--                 ['ctrl-o'] = {
+--                     fn = function (selected)
+--                         local path, lineno = selected[1]:match('^(.-):(%d+):')
+--                         if path and lineno then
+--                             local bufnr = vim.fn.bufnr(path, true)
+--                             if bufnr == -1 then return end
+--                             vim.fn.bufload(bufnr)
+--
+--                             -- Run the comment toggle inside the correct buffer
+--                             vim.api.nvim_buf_call(bufnr, function ()
+--                                 -- vim.cmd(string.format('%dnorm gcc', tonumber(lineno)))
+--                                 local line_num = tonumber(lineno)
+--                                 if line_num then
+--                                     vim.cmd(string.format('%ds/%s/%s/g', line_num, vim.fn.escape(grep_string, '/'),
+--                                         vim.fn.escape(replacement_string, '/')))
+--                                     vim.cmd('write')
+--                                 end
+--                             end)
+--                         end
+--                     end,
+--                     reload = true
+--                 },
+--             },
+--         })
+--     end)
+-- end, { nargs = 1 })
+
+
 -- grep for `ipdb`, ctrl-o toggle comment on line of matches
 vim.api.nvim_create_user_command('FzfLuaIpdb', function ()
     require('fzf-lua').grep({
