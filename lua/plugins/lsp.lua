@@ -113,7 +113,7 @@ return {
                 nmap('<leader>la', vim.lsp.buf.code_action, '[L]SP Code [A]ction')
 
                 nmap('gd', function ()
-                    require('fzf-lua').lsp_definitions { jump_to_single_result = true }
+                    require('fzf-lua').lsp_definitions { jump1 = true }
                 end, '[G]oto [D]efinition')
                 nmap('gr', require('fzf-lua').lsp_references, '[G]oto [R]eferences')
                 nmap('gI', require('fzf-lua').lsp_implementations, '[G]oto [I]mplementation')

@@ -11,4 +11,4 @@ vim.api.nvim_set_hl(0, 'StatusLineNC', { bg = 'None' })
 -- -- vim.api.nvim_set_hl(0, 'NvimTreeWinSeparator', { fg = 'None' })
 -- vim.api.nvim_set_hl(0, 'Cursorline', { bg = '#2e383c' })
 vim.api.nvim_set_hl(0, 'Visual', { link = 'TelescopeSelection' })
-
+vim.api.nvim_set_hl(0, 'MatchParen', { fg = 'None', bg = '#54546D', bold = true })
