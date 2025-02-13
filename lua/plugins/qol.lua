@@ -83,4 +83,10 @@ return {
         event = { 'CursorMoved', 'WinScrolled' },
         opts = {},
     },
+    {
+        'catgoose/nvim-colorizer.lua',
+        event = 'BufReadPre',
+        opts = {
+        },
+    }
 }

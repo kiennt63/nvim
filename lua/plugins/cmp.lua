@@ -186,10 +186,10 @@ return {
                         score_offset = 4,
                     },
                     snippets = {
-                        score_offset = 3,
+                        score_offset = 2,
                     },
                     path = {
-                        score_offset = 2,
+                        score_offset = 1,
                     },
                     buffer = {
                         score_offset = 0,
@@ -232,6 +232,11 @@ return {
                                 }
                             },
                         }
+                    }
+                },
+                accept = {
+                    auto_brackets = {
+                        enabled = true,
                     }
                 },
                 -- documentation = { window = { border = 'single' } },

@@ -48,35 +48,6 @@ return {
         'ellisonleao/gruvbox.nvim',
     },
     {
-        'rebelot/kanagawa.nvim',
-        config = function ()
-            require('kanagawa').setup({
-                compile = false,  -- enable compiling the colorscheme
-                undercurl = true, -- enable undercurls
-                commentStyle = { italic = true },
-                functionStyle = {},
-                keywordStyle = { italic = true },
-                statementStyle = { bold = true },
-                typeStyle = {},
-                transparent = false,
-                dimInactive = false,
-                terminalColors = true,
-                colors = {
-                    palette = {},
-                    theme = { wave = {}, lotus = {}, dragon = {}, all = {} },
-                },
-                overrides = function (colors) -- add/modify highlights
-                    return {}
-                end,
-                theme = 'dragon', -- Load "wave" theme when 'background' option is not set
-                background = {    -- map the value of 'background' option to a theme
-                    dark = 'dragon',
-                    light = 'lotus'
-                },
-            })
-        end
-    },
-    {
         'thesimonho/kanagawa-paper.nvim',
         lazy = false,
         priority = 1000,
@@ -91,8 +62,15 @@ return {
             keywordStyle = { italic = true, bold = false },
             statementStyle = { italic = false, bold = false },
             typeStyle = { italic = false },
-            colors = { theme = {}, palette = {} }, -- override default palette and theme colors
-            overrides = function ()      -- override highlight groups
+            colors = {
+                theme = {
+                },
+                palette = {
+                    roninYellow = '#FFA066',
+                    samuraiRed = '#FF5D62',
+                }
+            },
+            overrides = function () -- override highlight groups
                 return {}
             end,
         },

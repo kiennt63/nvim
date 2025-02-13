@@ -231,6 +231,9 @@ end, opts)
 
 -- FzfLua
 keymap('n', '<leader>o', "<cmd>lua require('fzf-lua').files()<cr>", opts)
+keymap('n', '<leader>ff',
+    "<cmd>lua require('fzf-lua').files({ winopts = { width = 0.95, height = 0.95 }, formatter = 'path.dirname_first' })<cr>",
+    opts)
 keymap('n', '<leader>fg', "<cmd>lua require('fzf-lua').live_grep()<CR>", opts)
 keymap(
     'n',
@@ -244,7 +247,10 @@ keymap('n', '<leader>fd', '<cmd>FzfLuaIpdb<cr>', opts)
 -- Git workstree
 -- File manager
 keymap('n', '<leader>fq', ':RnvimrToggle<cr>', opts)
-keymap('n', '<leader>e', '<cmd>lua MiniFiles.open()<cr>', opts)
+keymap('n', '<leader>e', function ()
+    local path = vim.bo.buftype ~= 'nofile' and vim.api.nvim_buf_get_name(0) or nil
+    MiniFiles.open(path)
+end, opts)
 
 -- Searching
 keymap('v', '//', [[y/\V<c-r>=escape(@",'/\')<cr><cr>]], opts)
