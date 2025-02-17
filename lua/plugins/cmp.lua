@@ -1,6 +1,6 @@
 return {
     'saghen/blink.cmp',
-    tag = 'v0.10.0',
+    tag = 'v0.12.4',
     dependencies = {
         'L3MON4D3/LuaSnip',
         version = 'v2.*',
@@ -175,6 +175,12 @@ return {
                 ['<Tab>'] = { 'select_next', 'snippet_forward', 'fallback' },
                 ['<S-Tab>'] = { 'select_prev', 'snippet_backward', 'fallback' },
             },
+            cmdline = {
+                enabled = false,
+            },
+            term = {
+                enabled = false,
+            },
             appearance = {
                 use_nvim_cmp_as_default = true,
                 nerd_font_variant = 'normal',
@@ -196,7 +202,6 @@ return {
                     },
                 },
                 default = { 'snippets', 'path', 'buffer', 'lsp', },
-                cmdline = {},
             },
 
             completion = {
