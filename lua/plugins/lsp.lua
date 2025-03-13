@@ -94,7 +94,20 @@ return {
         config = function (_, opts)
             local util = require 'lspconfig/util'
 
-            local on_attach = function (_, bufnr)
+            local on_attach = function (client, bufnr)
+                if client.name == 'basedpyright' then
+                    client.server_capabilities.semanticTokensProvider = nil
+                end
+
+                if client.name == 'ruff' then
+                    -- Disable hover in favor of Pyright
+                    client.server_capabilities.hoverProvider = false
+
+                    -- Disable formatting
+                    client.server_capabilities.documentFormattingProvider = false
+                    client.server_capabilities.documentRangeFormattingProvider = false
+                end
+
                 local nmap = function (keys, func, desc)
                     if desc then
                         desc = 'LSP: ' .. desc
@@ -215,39 +228,73 @@ return {
                     },
                 },
 
-                pylsp = {
+                basedpyright = {
                     settings = {
-                        pylsp = {
-                            plugins = {
-                                -- jedi_completion = {
-                                --     include_params = true,
-                                -- },
-                                -- jedi_signature_help = { enabled = true },
-                                pyflakes = { enabled = true },
-                                pylint = {
-                                    args = { '--ignore=E501,E231', '-' },
-                                    enabled = true,
-                                    debounce = 200,
+                        basedpyright = {
+                            disableOrganizeImports = true,
+                            typeCheckingMode = 'off',
+                            analysis = {
+                                diagnosticMode = 'openFilesOnly',
+                                diagnosticSeverityOverrides = {
+                                    reportUnusedImport = 'none',
                                 },
-                                pylsp_mypy = { enabled = true },
-                                pycodestyle = {
-                                    enabled = true,
-                                    ignore = { 'E501', 'E231', 'W293', 'E266' },
-                                    maxLineLength = 88,
+                                inlayHints = {
+                                    callArgumentNames = true
                                 },
-                                autopep8 = {
-                                    enabled = false,
-                                },
-                                yapf = {
-                                    enabled = false,
-                                },
-                                black = {
-                                    enabled = false,
-                                },
+                                disable = { 'reportUnusedImport' },
+                            }
+                        }
+                    }
+                },
+
+                ruff = {
+                    settings = {
+                        ruff = {
+                            lineLength = 100,               -- Match Black formatting
+                            lint = {
+                                enable = true,              -- Enable linting
+                                select = { 'E', 'W', 'F' }, -- Select which rules to use
+                            },
+                            typeCheck = {
+                                enable = true, -- Enable type checking (like Mypy)
                             },
                         },
                     },
                 },
+
+                -- pylsp = {
+                --     settings = {
+                --         pylsp = {
+                --             plugins = {
+                --                 -- jedi_completion = {
+                --                 --     include_params = true,
+                --                 -- },
+                --                 -- jedi_signature_help = { enabled = true },
+                --                 pyflakes = { enabled = true },
+                --                 pylint = {
+                --                     args = { '--ignore=E501,E231', '-' },
+                --                     enabled = true,
+                --                     debounce = 200,
+                --                 },
+                --                 pylsp_mypy = { enabled = true },
+                --                 pycodestyle = {
+                --                     enabled = true,
+                --                     ignore = { 'E501', 'E231', 'W293', 'E266' },
+                --                     maxLineLength = 88,
+                --                 },
+                --                 autopep8 = {
+                --                     enabled = false,
+                --                 },
+                --                 yapf = {
+                --                     enabled = false,
+                --                 },
+                --                 black = {
+                --                     enabled = false,
+                --                 },
+                --             },
+                --         },
+                --     },
+                -- },
                 rust_analyzer = {
                     settings = {
                         ['rust-analyzer'] = {

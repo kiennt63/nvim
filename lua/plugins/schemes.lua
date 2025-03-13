@@ -40,13 +40,12 @@ return {
             vim.g.gruvbox_material_background = 'medium'
             vim.g.gruvbox_material_transparent_background = 1
             vim.g.gruvbox_material_better_performance = 1
+            vim.g.gruvbox_material_enable_italic = 1
+            vim.g.gruvbox_material_enable_bold = 0
         end,
         priority = 1000,
     },
 
-    {
-        'ellisonleao/gruvbox.nvim',
-    },
     {
         'thesimonho/kanagawa-paper.nvim',
         lazy = false,
