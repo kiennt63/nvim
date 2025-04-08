@@ -174,6 +174,7 @@ return {
                 preset = 'enter',
                 ['<Tab>'] = { 'select_next', 'snippet_forward', 'fallback' },
                 ['<S-Tab>'] = { 'select_prev', 'snippet_backward', 'fallback' },
+                ['<C-e>'] = { 'hide', 'fallback' },
             },
             cmdline = {
                 enabled = false,
