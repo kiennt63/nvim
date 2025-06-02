@@ -3,8 +3,8 @@ return {
         'echasnovski/mini.nvim',
         version = '*',
         config = function ()
-            require('mini.comment').setup()
-            require('mini.pairs').setup()
+            -- require('mini.comment').setup()
+            -- require('mini.pairs').setup()
             require('mini.surround').setup {
                 mappings = {
                     add = 'co',          -- Add surrounding in Normal and Visual modes
@@ -64,8 +64,8 @@ return {
                 header = '',
                 footer = '',
                 content_hooks = {
-                    starter.gen_hook.adding_bullet(),
-                    -- starter.gen_hook.adding_bullet('', false),
+                    -- starter.gen_hook.adding_bullet(),
+                    starter.gen_hook.adding_bullet('', false),
                     starter.gen_hook.aligning('center', 'center'),
                 },
             }
