@@ -305,7 +305,18 @@ return {
                     },
                 },
                 zls = {
-
+                    capabilities = vim.tbl_deep_extend('force',
+                        vim.deepcopy(require('blink.cmp').get_lsp_capabilities()),
+                        {
+                            textDocument = {
+                                completion = {
+                                    completionItem = {
+                                        snippetSupport = false,
+                                    },
+                                },
+                            },
+                        }
+                    )
                 }
             }
 
@@ -372,7 +383,7 @@ return {
 
             vim.diagnostic.config(vim.deepcopy(opts.diagnostics))
 
-            vim.lsp.handlers["textDocument/publishDiagnostics"] =
+            vim.lsp.handlers['textDocument/publishDiagnostics'] =
                 vim.lsp.with(vim.lsp.diagnostic.on_publish_diagnostics, {
                     -- Disable underline, it's very annoying
                     underline = false,
