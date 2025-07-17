@@ -277,3 +277,30 @@ vim.api.nvim_create_user_command('DapPickPythonFile', function ()
         },
     }
 end, {})
+
+-- auto unlink the last snippet when enter insert outside of the snippet
+-- basically save the tab key after half finish previous lsp snippet.
+vim.api.nvim_create_autocmd('InsertEnter', {
+    callback = function ()
+        local ls = require('luasnip')
+        local current_node = ls.session.current_nodes[vim.api.nvim_get_current_buf()]
+        if not current_node then return end
+
+        local snippet = current_node.parent.snippet
+        local cursor = vim.api.nvim_win_get_cursor(0)
+        local row, col = cursor[1], cursor[2]
+
+        local from = snippet.mark:pos_begin()
+        local to = snippet.mark:pos_end()
+
+        local function out_of_range()
+            return row < from[1] + 1 or row > to[1] + 1 or
+                (row == from[1] + 1 and col < from[2]) or
+                (row == to[1] + 1 and col > to[2])
+        end
+
+        if out_of_range() then
+            ls.unlink_current()
+        end
+    end,
+})
