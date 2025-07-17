@@ -305,18 +305,18 @@ return {
                     },
                 },
                 zls = {
-                    capabilities = vim.tbl_deep_extend('force',
-                        vim.deepcopy(require('blink.cmp').get_lsp_capabilities()),
-                        {
-                            textDocument = {
-                                completion = {
-                                    completionItem = {
-                                        snippetSupport = false,
-                                    },
-                                },
-                            },
-                        }
-                    )
+                    -- capabilities = vim.tbl_deep_extend('force',
+                    --     vim.deepcopy(require('blink.cmp').get_lsp_capabilities()),
+                    --     {
+                    --         textDocument = {
+                    --             completion = {
+                    --                 completionItem = {
+                    --                     snippetSupport = false,
+                    --                 },
+                    --             },
+                    --         },
+                    --     }
+                    -- )
                 }
             }
 
