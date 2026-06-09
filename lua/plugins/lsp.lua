@@ -1,179 +1,74 @@
 return {
+    { 'williamboman/mason.nvim', config = true },
+
     {
-        'neovim/nvim-lspconfig',
-        dependencies = {
-            { 'williamboman/mason.nvim', config = true },
-            'williamboman/mason-lspconfig.nvim',
-            'folke/neodev.nvim',
-            'saghen/blink.cmp',
-            {
-                'p00f/clangd_extensions.nvim',
-                lazy = true,
-                config = function ()
-                    require('clangd_extensions').setup({
-                        inlay_hints = {
-                            inline = vim.fn.has 'nvim-0.10' == 1,
-                            only_current_line = false,
-                            only_current_line_autocmd = { 'CursorHold' },
-                            show_parameter_hints = true,
-                            parameter_hints_prefix = '<- ',
-                            other_hints_prefix = '=> ',
-                            max_len_align = false,
-                            max_len_align_padding = 1,
-                            right_align = false,
-                            right_align_padding = 7,
-                            highlight = 'Comment',
-                            priority = 100,
-                        },
-                        ast = {
-                            role_icons = {
-                                type = '',
-                                declaration = '',
-                                expression = '',
-                                specifier = '',
-                                statement = '',
-                                ['template argument'] = '',
-                            },
+        dir    = vim.fn.stdpath('config'),
+        name   = 'lsp-setup',
+        lazy   = false,
+        config = function ()
+            -- ── on_attach ────────────────────────────────────────────────────
+            vim.api.nvim_create_autocmd('LspAttach', {
+                group = vim.api.nvim_create_augroup('lsp-on-attach', { clear = true }),
+                callback = function (ev)
+                    local client = vim.lsp.get_client_by_id(ev.data.client_id)
+                    local bufnr  = ev.buf
 
-                            kind_icons = {
-                                Compound = '',
-                                Recovery = '',
-                                TranslationUnit = '',
-                                PackExpansion = '',
-                                TemplateTypeParm = '',
-                                TemplateTemplateParm = '',
-                                TemplateParamObject = '',
-                            },
+                    if client and client.name == 'basedpyright' then
+                        client.server_capabilities.semanticTokensProvider = nil
+                    end
 
-                            highlights = {
-                                detail = 'Comment',
-                            },
-                        },
-                        memory_usage = {
-                            border = 'none',
-                        },
-                        symbol_info = {
-                            border = 'none',
-                        },
-                    })
+                    if client and client.name == 'ruff' then
+                        client.server_capabilities.hoverProvider = false
+                        client.server_capabilities.documentFormattingProvider = false
+                        client.server_capabilities.documentRangeFormattingProvider = false
+                    end
+
+                    local nmap = function (keys, func, desc)
+                        vim.keymap.set('n', keys, func, { buffer = bufnr, desc = 'LSP: ' .. (desc or '') })
+                    end
+                    local imap = function (keys, func, desc)
+                        vim.keymap.set('i', keys, func, { buffer = bufnr, desc = 'LSP: ' .. (desc or '') })
+                    end
+
+                    nmap('<leader>lr', vim.lsp.buf.rename, '[L]SP [R]ename')
+                    nmap('<leader>la', vim.lsp.buf.code_action, '[L]SP Code [A]ction')
+
+                    nmap('gd', function ()
+                        require('fzf-lua').lsp_definitions { jump1 = true }
+                    end, '[G]oto [D]efinition')
+                    nmap('gr', require('fzf-lua').lsp_references, '[G]oto [R]eferences')
+                    nmap('gI', require('fzf-lua').lsp_implementations, '[G]oto [I]mplementation')
+                    nmap('<leader>lt', require('fzf-lua').lsp_typedefs, 'Type [D]efinition')
+                    nmap('<leader>ds', require('fzf-lua').lsp_document_symbols, '[D]ocument [S]ymbols')
+                    nmap('<leader>ws', require('fzf-lua').lsp_workspace_symbols, '[W]orkspace [S]ymbols')
+
+                    nmap('K', vim.lsp.buf.hover, 'Hover Documentation')
+                    imap('<C-k>', vim.lsp.buf.signature_help, 'Signature Documentation')
+
+                    nmap('<space>lf', function ()
+                        vim.lsp.buf.format { async = true }
+                    end, 'Format')
+
+                    nmap('gD', require('fzf-lua').lsp_declarations, '[G]oto [D]eclaration')
+                    nmap('<leader>wa', vim.lsp.buf.add_workspace_folder, '[W]orkspace [A]dd Folder')
+                    nmap('<leader>wr', vim.lsp.buf.remove_workspace_folder, '[W]orkspace [R]emove Folder')
+                    nmap('<leader>wl', function ()
+                        print(vim.inspect(vim.lsp.buf.list_workspace_folders()))
+                    end, '[W]orkspace [L]ist Folders')
+
+                    vim.api.nvim_buf_create_user_command(bufnr, 'Format', function (_)
+                        vim.lsp.buf.format()
+                    end, { desc = 'Format current buffer with LSP' })
                 end,
-            },
-            -- {
-            --     'mrcjkb/rustaceanvim',
-            --     version = '^4', -- Recommended
-            --     ft = { 'rust' },
-            -- },
-        },
-        opts = {
-            diagnostics = {
-                underline = {
-                    severity = false,
-                },
-                update_in_insert = false,
-                virtual_text = {
-                    severity = { min = vim.diagnostic.severity.WARN },
-                    spacing = 4,
-                    source = 'if_many',
-                    prefix = '●',
-                },
-                severity_sort = true,
-                signs = {
-                    text = {
-                        [vim.diagnostic.severity.ERROR] = '',
-                        [vim.diagnostic.severity.WARN] = '',
-                        [vim.diagnostic.severity.HINT] = '',
-                        [vim.diagnostic.severity.INFO] = '',
-                    },
-                },
-                --     severity = {
-                --         ['unused-local'] = vim.diagnostic.severity.HINT,
-                --     },
-            }
-        },
+            })
 
-        config = function (_, opts)
-            local util = require 'lspconfig/util'
+            -- ── Capabilities ─────────────────────────────────────────────────
+            local capabilities = require('blink.cmp').get_lsp_capabilities()
 
-            local on_attach = function (client, bufnr)
-                if client.name == 'basedpyright' then
-                    client.server_capabilities.semanticTokensProvider = nil
-                end
-
-                if client.name == 'ruff' then
-                    -- Disable hover in favor of Pyright
-                    client.server_capabilities.hoverProvider = false
-
-                    -- Disable formatting
-                    client.server_capabilities.documentFormattingProvider = false
-                    client.server_capabilities.documentRangeFormattingProvider = false
-                end
-
-                local nmap = function (keys, func, desc)
-                    if desc then
-                        desc = 'LSP: ' .. desc
-                    end
-                    vim.keymap.set('n', keys, func, { buffer = bufnr, desc = desc })
-                end
-
-                local imap = function (keys, func, desc)
-                    if desc then
-                        desc = 'LSP: ' .. desc
-                    end
-                    vim.keymap.set('i', keys, func, { buffer = bufnr, desc = desc })
-                end
-
-                nmap('<leader>lr', vim.lsp.buf.rename, '[L]SP [R]ename')
-                nmap('<leader>la', vim.lsp.buf.code_action, '[L]SP Code [A]ction')
-
-                nmap('gd', function ()
-                    require('fzf-lua').lsp_definitions { jump1 = true }
-                end, '[G]oto [D]efinition')
-                nmap('gr', require('fzf-lua').lsp_references, '[G]oto [R]eferences')
-                nmap('gI', require('fzf-lua').lsp_implementations, '[G]oto [I]mplementation')
-                nmap('<leader>lt', require('fzf-lua').lsp_typedefs, 'Type [D]efinition')
-                nmap('<leader>ds', require('fzf-lua').lsp_document_symbols, '[D]ocument [S]ymbols')
-                nmap(
-                    '<leader>ws',
-                    require('fzf-lua').lsp_workspace_symbols,
-                    '[W]orkspace [S]ymbols'
-                )
-
-                -- See `:help K` for why this keymap
-                nmap('K', vim.lsp.buf.hover, 'Hover Documentation')
-                imap('<C-k>', vim.lsp.buf.signature_help, 'Signature Documentation')
-
-                -- Format code
-                nmap('<space>lf', function ()
-                    vim.lsp.buf.format { async = true }
-                end, 'Format')
-
-                nmap('gD', require('fzf-lua').lsp_declarations, '[G]oto [D]eclaration')
-                nmap('<leader>wa', vim.lsp.buf.add_workspace_folder, '[W]orkspace [A]dd Folder')
-                nmap(
-                    '<leader>wr',
-                    vim.lsp.buf.remove_workspace_folder,
-                    '[W]orkspace [R]emove Folder'
-                )
-                nmap('<leader>wl', function ()
-                    print(vim.inspect(vim.lsp.buf.list_workspace_folders()))
-                end, '[W]orkspace [L]ist Folders')
-
-                -- Create a command `:Format` local to the LSP buffer
-                vim.api.nvim_buf_create_user_command(bufnr, 'Format', function (_)
-                    vim.lsp.buf.format()
-                end, { desc = 'Format current buffer with LSP' })
-            end
-
+            -- ── Servers ──────────────────────────────────────────────────────
             local servers = {
                 clangd = {
-                    filetypes = {
-                        'c',
-                        'cpp',
-                        'objc',
-                        'objcpp',
-                        'cuda',
-                    },
-                    cmd = {
+                    cmd          = {
                         'clangd',
                         '--background-index',
                         '--offset-encoding=utf-16',
@@ -185,276 +80,229 @@ return {
                         -- '--query-driver=/usr/local/cuda/bin/nvcc',
                         -- '--query-driver=/usr/bin/c++',
                     },
+                    filetypes    = { 'c', 'cpp', 'objc', 'objcpp', 'cuda' },
+                    root_markers = { 'compile_commands.json', '.git' },
                     init_options = {
-                        usePlaceholders = true,
+                        usePlaceholders    = true,
                         completeUnimported = true,
-                        clangdFileStatus = true,
+                        clangdFileStatus   = true,
                     },
                 },
 
-                glsl_analyzer = {},
+                glsl_analyzer = {
+                    cmd          = { 'glsl_analyzer' },
+                    filetypes    = { 'glsl', 'vert', 'frag', 'geom', 'tesc', 'tese', 'comp' },
+                    root_markers = { '.git' },
+                },
 
                 lua_ls = {
-                    settings = {
+                    cmd          = { 'lua-language-server' },
+                    filetypes    = { 'lua' },
+                    root_markers = { '.luarc.json', '.git' },
+                    settings     = {
                         Lua = {
-                            format = {
+                            format      = {
                                 enable = true,
                                 indent_style = 'space',
                                 indent_size = '4',
-                                defaultConfig = {
-                                    indent_style = 'space',
-                                    indent_size = '4',
-                                },
+                                defaultConfig = { indent_style = 'space', indent_size = '4' },
                             },
-                            workspace = { checkThirdParty = false },
-                            telemetry = { enable = false },
-                            diagnostics = {
-                                -- Get the language server to recognize the `vim` global
-                                globals = { 'vim' },
-                            },
+                            workspace   = { checkThirdParty = false },
+                            telemetry   = { enable = false },
+                            diagnostics = { globals = { 'vim' } },
                         },
                     },
                 },
-                bashls = {},
+
+                bashls = {
+                    cmd          = { 'bash-language-server', 'start' },
+                    filetypes    = { 'sh', 'bash' },
+                    root_markers = { '.git' },
+                },
 
                 cmake = {
-                    root_dir = util.root_pattern('build', 'build_x64_linux', 'build_aarch64_linux'),
-                    settings = {
-                        cmake = {
-                            format = {
-                                enable = true, -- Enables formatting
-                            },
-                        },
+                    cmd          = { 'cmake-language-server' },
+                    filetypes    = { 'cmake' },
+                    root_markers = { 'build', 'build_x64_linux', 'build_aarch64_linux', '.git' },
+                    settings     = {
+                        cmake = { format = { enable = true } },
                     },
                 },
 
-                basedpyright = {
-                    settings = {
-                        basedpyright = {
-                            disableOrganizeImports = true,
-                            typeCheckingMode = 'off',
-                            analysis = {
-                                diagnosticMode = 'openFilesOnly',
-                                diagnosticSeverityOverrides = {
-                                    reportUnusedImport = 'none',
-                                },
-                                inlayHints = {
-                                    callArgumentNames = true
-                                },
-                                disable = { 'reportUnusedImport' },
-                            }
-                        }
-                    }
-                },
-
-                ruff = {
-                    settings = {
-                        ruff = {
-                            lineLength = 100,               -- Match Black formatting
-                            lint = {
-                                enable = true,              -- Enable linting
-                                select = { 'E', 'W', 'F' }, -- Select which rules to use
-                            },
-                            typeCheck = {
-                                enable = true, -- Enable type checking (like Mypy)
-                            },
-                        },
-                    },
-                },
-
-                -- pylsp = {
-                --     settings = {
-                --         pylsp = {
-                --             plugins = {
-                --                 -- jedi_completion = {
-                --                 --     include_params = true,
-                --                 -- },
-                --                 -- jedi_signature_help = { enabled = true },
-                --                 pyflakes = { enabled = true },
-                --                 pylint = {
-                --                     args = { '--ignore=E501,E231', '-' },
-                --                     enabled = true,
-                --                     debounce = 200,
-                --                 },
-                --                 pylsp_mypy = { enabled = true },
-                --                 pycodestyle = {
-                --                     enabled = true,
-                --                     ignore = { 'E501', 'E231', 'W293', 'E266' },
-                --                     maxLineLength = 88,
-                --                 },
-                --                 autopep8 = {
-                --                     enabled = false,
-                --                 },
-                --                 yapf = {
-                --                     enabled = false,
-                --                 },
-                --                 black = {
-                --                     enabled = false,
-                --                 },
+                -- basedpyright = {
+                --     cmd          = { 'basedpyright-langserver', '--stdio' },
+                --     filetypes    = { 'python' },
+                --     root_markers = { 'pyproject.toml', 'setup.py', '.git' },
+                --     settings     = {
+                --         basedpyright = {
+                --             disableOrganizeImports = true,
+                --             typeCheckingMode = 'off',
+                --             analysis = {
+                --                 diagnosticMode = 'openFilesOnly',
+                --                 diagnosticSeverityOverrides = { reportUnusedImport = 'none' },
+                --                 inlayHints = { callArgumentNames = true },
+                --                 disable = { 'reportUnusedImport' },
                 --             },
                 --         },
                 --     },
                 -- },
+
+                ty = {
+                    cmd          = { 'ty', 'server' },
+                    filetypes    = { 'python' },
+                    root_markers = { 'pyproject.toml', 'ty.toml', '.git' },
+                },
+
+                -- ruff = {
+                --     cmd          = { 'ruff', 'server' },
+                --     filetypes    = { 'python' },
+                --     root_markers = { 'pyproject.toml', 'ruff.toml', '.git' },
+                --     settings     = {
+                --         ruff = {
+                --             lineLength = 100,
+                --             lint = { enable = true, select = { 'E', 'W', 'F' } },
+                --             typeCheck = { enable = true },
+                --         },
+                --     },
+                -- },
+
                 rust_analyzer = {
-                    settings = {
+                    cmd          = { 'rust-analyzer' },
+                    filetypes    = { 'rust' },
+                    root_markers = { 'Cargo.toml', '.git' },
+                    settings     = {
                         ['rust-analyzer'] = {
-                            diagnostics = {
-                                enable = false,
-                            },
+                            diagnostics = { enable = false },
                         },
                     },
                 },
+
                 zls = {
-                    -- capabilities = vim.tbl_deep_extend('force',
-                    --     vim.deepcopy(require('blink.cmp').get_lsp_capabilities()),
-                    --     {
-                    --         textDocument = {
-                    --             completion = {
-                    --                 completionItem = {
-                    --                     snippetSupport = false,
-                    --                 },
-                    --             },
-                    --         },
-                    --     }
-                    -- )
-                }
+                    cmd          = { 'zls' },
+                    filetypes    = { 'zig', 'zir' },
+                    root_markers = { 'build.zig', '.git' },
+                },
+
+                gdscript = {
+                    cmd          = { 'gdscript' },
+                    filetypes    = { 'gd', 'gdscript' },
+                    root_markers = { 'project.godot', '.git' },
+                },
             }
 
-            -- Setup neovim lua configuration
-            require('neodev').setup()
-
-            local capabilities = require('blink.cmp').get_lsp_capabilities()
-            -- capabilities.offsetEncoding = { 'utf-16' }
-
-            -- Ensure the servers above are installed
-            local mason_lspconfig = require 'mason-lspconfig'
-
-            mason_lspconfig.setup {
-                -- ensure_installed = vim.tbl_keys(servers),
-            }
-
-            local function setup(server)
-                local server_opts = vim.tbl_deep_extend('force', {
-                    capabilities = vim.deepcopy(capabilities),
-                    on_attach = on_attach,
-                }, servers[server] or {})
-
-                require('lspconfig')[server].setup(server_opts)
+            for name, config in pairs(servers) do
+                vim.lsp.config(name, vim.tbl_deep_extend('force', { capabilities = capabilities }, config))
             end
 
+            vim.lsp.enable(vim.tbl_keys(servers))
 
-            for server, server_opts in pairs(servers) do
-                if server_opts then
-                    server_opts = server_opts == true and {} or server_opts
-                    if server_opts.enabled ~= false then
-                        setup(server)
-                        -- -- run manual setup if mason=false or if this is a server that cannot be installed with mason-lspconfig
-                        -- if server_opts.mason == false or not vim.tbl_contains(all_mslp_servers, server) then
-                        -- else
-                        --     ensure_installed[#ensure_installed + 1] = server
-                        -- end
-                    end
-                end
-            end
-
-            -- mason_lspconfig.setup_handlers {
-            --     function (server_name)
-            --         require('lspconfig')[server_name].setup {
-            --             capabilities = capabilities,
-            --             on_attach = on_attach,
-            --             settings = (servers[server_name] or {}).settings,
-            --             filetypes = (servers[server_name] or {}).filetypes,
-            --             cmd = (servers[server_name] or {}).cmd,
-            --             root_dir = (servers[server_name] or {}).root_dir,
-            --         }
-            --     end,
-            -- }
-
-            -- diagnostics signs
-            if vim.fn.has('nvim-0.10.0') == 0 then
-                if type(opts.diagnostics.signs) ~= 'boolean' then
-                    for severity, icon in pairs(opts.diagnostics.signs.text) do
-                        local name = vim.diagnostic.severity[severity]:lower():gsub('^%l', string.upper)
-                        name = 'DiagnosticSign' .. name
-                        vim.fn.sign_define(name, { text = icon, texthl = name, numhl = '' })
-                    end
-                end
-            end
-
-            vim.diagnostic.config(vim.deepcopy(opts.diagnostics))
-
-            vim.lsp.handlers['textDocument/publishDiagnostics'] =
-                vim.lsp.with(vim.lsp.diagnostic.on_publish_diagnostics, {
-                    -- Disable underline, it's very annoying
-                    underline = false,
-                    -- virtual_text = false,
-                    -- -- Enable virtual text, override spacing to 4
-                    -- -- virtual_text = {spacing = 4},
-                    -- -- Use a function to dynamically turn signs off
-                    -- -- and on, using buffer local variables
-                    -- signs = true,
-                    -- update_in_insert = false
-                })
+            -- ── Diagnostics ──────────────────────────────────────────────────
+            vim.diagnostic.config({
+                underline        = false,
+                update_in_insert = false,
+                virtual_text     = {
+                    severity = { min = vim.diagnostic.severity.WARN },
+                    spacing  = 4,
+                    source   = 'if_many',
+                    prefix   = '●',
+                },
+                severity_sort    = true,
+                signs            = {
+                    text = {
+                        [vim.diagnostic.severity.ERROR] = '',
+                        [vim.diagnostic.severity.WARN]  = '',
+                        [vim.diagnostic.severity.HINT]  = '',
+                        [vim.diagnostic.severity.INFO]  = '',
+                    },
+                },
+            })
         end,
     },
 
-    -- linter, formater
+    -- formatter
     {
-        'nvimtools/none-ls.nvim',
+        'stevearc/conform.nvim',
         config = function ()
-            local null_ls = require 'null-ls'
-
-            null_ls.setup {
-                sources = {
-                    -- null_ls.builtins.formatting.stylua,
-                    -- null_ls.builtins.diagnostics.eslint,
-                    -- null_ls.builtins.completion.spell,
-                    null_ls.builtins.formatting.black,
-                    null_ls.builtins.formatting.isort,
-                    null_ls.builtins.formatting.prettier.with {
-                        filetypes = { 'html', 'json', 'yaml', 'markdown' },
-                    },
+            require('conform').setup {
+                formatters_by_ft = {
+                    python   = { 'isort', 'black' },
+                    html     = { 'prettier' },
+                    json     = { 'prettier' },
+                    yaml     = { 'prettier' },
+                    markdown = { 'prettier' },
+                    c        = { 'clang_format' },
+                    cpp      = { 'clang_format' },
+                    cuda     = { 'clang_format' },
                 },
             }
+
+            -- override the <space>lf set in LspAttach with conform
+            -- lsp_format = 'fallback' means: use LSP if no conform formatter exists
+            vim.keymap.set({ 'n', 'v' }, '<space>lf', function ()
+                require('conform').format { async = true, lsp_format = 'fallback' }
+            end, { desc = 'Format' })
+        end,
+    },
+
+
+
+    {
+        'p00f/clangd_extensions.nvim',
+        lazy = true,
+        config = function ()
+            require('clangd_extensions').setup({
+                inlay_hints  = {
+                    inline = vim.fn.has 'nvim-0.10' == 1,
+                    only_current_line = false,
+                    only_current_line_autocmd = { 'CursorHold' },
+                    show_parameter_hints = true,
+                    parameter_hints_prefix = '<- ',
+                    other_hints_prefix = '=> ',
+                    max_len_align = false,
+                    max_len_align_padding = 1,
+                    right_align = false,
+                    right_align_padding = 7,
+                    highlight = 'Comment',
+                    priority = 100,
+                },
+                ast          = {
+                    role_icons = {
+                        type = '',
+                        declaration = '',
+                        expression = '',
+                        specifier = '',
+                        statement = '',
+                        ['template argument'] = '',
+                    },
+                    kind_icons = {
+                        Compound = '',
+                        Recovery = '',
+                        TranslationUnit = '',
+                        PackExpansion = '',
+                        TemplateTypeParm = '',
+                        TemplateTemplateParm = '',
+                        TemplateParamObject = '',
+                    },
+                    highlights = { detail = 'Comment' },
+                },
+                memory_usage = { border = 'none' },
+                symbol_info  = { border = 'none' },
+            })
         end,
     },
 
     -- diagnostics
     {
         'folke/trouble.nvim',
-        opts = {}, -- for default options, refer to the configuration section for custom setup.
-        cmd = 'Trouble',
+        opts = {},
+        cmd  = 'Trouble',
         keys = {
-            {
-                '<leader>t',
-                '<cmd>Trouble diagnostics toggle<cr>',
-                desc = 'Diagnostics (Trouble)',
-            },
-            {
-                '<leader>xX',
-                '<cmd>Trouble diagnostics toggle filter.buf=0<cr>',
-                desc = 'Buffer Diagnostics (Trouble)',
-            },
-            {
-                '<leader>cs',
-                '<cmd>Trouble symbols toggle focus=false<cr>',
-                desc = 'Symbols (Trouble)',
-            },
-            {
-                '<leader>cl',
-                '<cmd>Trouble lsp toggle focus=false win.position=right<cr>',
-                desc = 'LSP Definitions / references / ... (Trouble)',
-            },
-            {
-                '<leader>xL',
-                '<cmd>Trouble loclist toggle<cr>',
-                desc = 'Location List (Trouble)',
-            },
-            {
-                '<leader>xQ',
-                '<cmd>Trouble qflist toggle<cr>',
-                desc = 'Quickfix List (Trouble)',
-            },
+            { '<leader>t',  '<cmd>Trouble diagnostics toggle<cr>',                        desc = 'Diagnostics (Trouble)' },
+            { '<leader>xX', '<cmd>Trouble diagnostics toggle filter.buf=0<cr>',           desc = 'Buffer Diagnostics (Trouble)' },
+            { '<leader>cs', '<cmd>Trouble symbols toggle focus=false<cr>',                desc = 'Symbols (Trouble)' },
+            { '<leader>cl', '<cmd>Trouble lsp toggle focus=false win.position=right<cr>', desc = 'LSP Definitions / references / ... (Trouble)' },
+            { '<leader>xL', '<cmd>Trouble loclist toggle<cr>',                            desc = 'Location List (Trouble)' },
+            { '<leader>xQ', '<cmd>Trouble qflist toggle<cr>',                             desc = 'Quickfix List (Trouble)' },
         },
     },
 }
