@@ -10,7 +10,7 @@ return {
                 },
                 opts = {
                     icon = '',
-                    max_length = 7,
+                    max_length = 5,
                     separator_left = ' ',
                     separator_right = '',
                     reverse_order = true
@@ -65,7 +65,7 @@ return {
                     },
 
                     lualine_b = {
-                        { 'branch', icon = { '' } },
+                        -- { 'branch', icon = { '' } },
                         {
                             'diff',
                             source = function ()
@@ -156,7 +156,10 @@ return {
                     lualine_z = {
                         {
                             'location',
-                            separator = {
+                            fmt          = function (str)
+                                return string.format('%-7s', str)
+                            end,
+                            separator    = {
                                 left = separator_glyphs.open,
                                 right = separator_glyphs.close,
                             },
@@ -190,6 +193,9 @@ return {
         },
         config = function ()
             -- triggers CursorHold event faster
+            if vim.opt.diff:get() then
+                return
+            end
             vim.opt.updatetime = 200
 
             require('barbecue').setup {

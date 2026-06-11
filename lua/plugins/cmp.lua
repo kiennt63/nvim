@@ -1,6 +1,7 @@
 return {
     'saghen/blink.cmp',
-    tag = 'v0.12.4',
+    -- tag = 'v0.12.4',
+    branch ='v1',
     dependencies = {
         'L3MON4D3/LuaSnip',
         version = 'v2.*',
@@ -114,24 +115,14 @@ return {
                     'pycls',
                     fmt(
                         [[
-                    class {}:
-                        def __init__(self, {}):
-                            {}
+                class {}:
+                    def __init__(self, {}):
+                        {}
                     ]],
                         {
-                            i(1, 'ClassName'),        -- Class name
-                            i(2, 'arg1, arg2, arg3'), -- Constructor arguments
-                            i(
-                                3,
-                                fmt('self.{} = {}\n        self.{} = {}\n        self.{} = {}', {
-                                    i(4, 'arg1'),
-                                    i(4),
-                                    i(5, 'arg2'),
-                                    i(5),
-                                    i(6, 'arg3'),
-                                    i(6),
-                                })
-                            ),
+                            i(1, 'ClassName'),
+                            i(2, 'arg1, arg2, arg3'),
+                            i(3, 'pass'),  -- just a plain string default
                         }
                     )
                 ),
@@ -242,7 +233,7 @@ return {
                 },
                 accept = {
                     auto_brackets = {
-                        enabled = true,
+                        enabled = false,
                     }
                 },
                 -- documentation = { window = { border = 'single' } },
